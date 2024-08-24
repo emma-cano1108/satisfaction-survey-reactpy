@@ -1,0 +1,34 @@
+[
+  {
+    "id": 1,
+    "text": "¿Qué tan satisfecho estás con nuestro servicio? (Muy insatisfecho, insatisfecho, neutral, satisfecho, muy satisfecho)"
+  },
+  {
+    "id": 2,
+    "text": "¿Qué tan recomendable es nuestro servicio? (Muy poco, poco, ni mucho ni poco, mucho, demasiado)"
+  },
+  {
+    "id": 3,
+    "text": "¿Con qué frecuencia usa nuestros servicios en una semana? (1 vez, 2 a 3 veces, 4 veces, 5 veces, Más de 5 veces"
+  },
+  {
+    "id":4,
+    "text": "¿Presentaste alguna inconformidad de algún tipo con nuestro servicio?"
+  },
+  {
+    "id":5,
+    "text": "¿Volvería a usar nuestro servicio?"
+  },
+  {
+    "id":6,
+    "text":"¿Considera que nuestros servicios cumplen con sus expectativas?"
+  },
+  {
+    "id":7,
+    "text":"¿Qué es lo que más le gusta de nuestro servicio?"
+  },
+  {
+    "id":8,
+    "text":"¿Qué es lo que menos le gusta de nuestro servicio?"
+  }
+]
