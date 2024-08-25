@@ -16,6 +16,9 @@ def App():
     def handleRadioChange(idx, newOption): #Misma función para preguntas Sí/No.
         print(idx, newOption)
 
+    def handleCommentChange(idx, newComment):
+        print(idx, newComment)
+
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
         html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
             html.header( #Encabezado de la página
@@ -28,9 +31,9 @@ def App():
             Star_Question(0, handleRatingChange),
             Star_Question(1, handleRatingChange),
             Star_Question(2, handleRatingChange),
-            Radio_Question(3, handleRadioChange),
-            Radio_Question(4, handleRadioChange),
-            Radio_Question(5, handleRadioChange),
+            Radio_Question(3, handleRadioChange, handleCommentChange),
+            Radio_Question(4, handleRadioChange, handleCommentChange),
+            Radio_Question(5, handleRadioChange, handleCommentChange),
             Open_Question(6),
             Open_Question(7)
             
@@ -64,18 +67,22 @@ def Star_Question(idx, onRatingChange): #Componente de pregunta de estrellas
 
 
 @component
-def Radio_Question(idx, onRadioChange): #Componente de preguntas Sí/No
+def Radio_Question(idx, onRadioChange, onCommentChange): #Componente de preguntas Sí/No
     radio_option, set_radio_option = hooks.use_state(None)
-    def radioHandleChange(e):
+    def radioHandleChange(e):#Callback para pasar valor al componente App
         set_radio_option(e["target"]["value"])
         onRadioChange(idx, e["target"]["value"])
-    def Opinion_Text(): #Función que genera el texto y el input de la opinión libre según el índice de la pregunta
+
+    def commentHandleChange(e): #Callback para pasar cadena del comentario en caso de existir
+        onCommentChange(idx, e["target"]["value"])
+
+    def Opinion_Text(): #Función que genera el texto y el input de la opinión libre según el índice de la pregunta y la opción seleccionada
         
 
         if radio_option == "0":
             return html.section(
                 html.h6({"style":{"margin-bottom":"10px"}}, questions[idx]["opt-text"]),
-                html.textarea({"placeholder":"Ingrese aquí sus comentarios.", "style":{"width":"70%", "height":"100px", "resize":"none"}}), html.br(), html.br(),
+                html.textarea({"onchange":commentHandleChange,"placeholder":"Ingrese aquí sus comentarios.", "style":{"width":"70%", "height":"100px", "resize":"none"}}), html.br(), html.br(),
             )
         else:
             return html.br() #Retornar un salto de línea en caso de no haber necesidad de mostrar el cuadro de texto
