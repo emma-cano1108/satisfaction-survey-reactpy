@@ -11,7 +11,7 @@ answers=[]
 
 @component #Componente principal
 def App():
-    current_answer={"id":1}
+    current_answer, set_current_answer = hooks.use_state({"id":1})
     def handleRatingChange(idx, newRating): #Función que recibe y almacena el valor de cada StarQuestion y RadioQuestion en el diccionario current_answer
         current_answer["q"+str((idx+1))] = int(newRating)
         print(current_answer)
@@ -29,10 +29,12 @@ def App():
 
     def handleSubmit():
         apply_answer = current_answer.copy()
-        
+
         answers.append(apply_answer)
+
         print(answers)
         
+        set_current_answer({"id":current_answer["id"]+1})
         return
         
         
