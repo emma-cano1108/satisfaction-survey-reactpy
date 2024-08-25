@@ -22,7 +22,9 @@ def App():
             Star_Question(2),
             Radio_Question(3),
             Radio_Question(4),
-            Radio_Question(5)
+            Radio_Question(5),
+            Open_Question(6),
+            Open_Question(7)
             
 
         )
@@ -49,26 +51,29 @@ def Star_Question(idx): #Componente de pregunta de estrellas
 @component
 def Radio_Question(idx): #Componente de preguntas Sí/No
     def Opinion_Text(): #Función que genera el texto y el input de la opinión libre según el índice de la pregunta (Próximamente esto solo saldrá cuando se responda de forma negativa a la pregunta)
+        a = 0
         if idx == 3:
             return html.section(
-                html.h6("¿Podría describirnos su inconformidad?"),
-                html.textarea({"placeholder":"Ingrese aquí sus comentarios."})
+                html.h6({"style":{"margin-bottom":"10px"}},"¿Podría describirnos su inconformidad?"),
+                html.textarea({"placeholder":"Ingrese aquí sus comentarios.", "style":{"width":"70%", "height":"100px", "resize":"none"}}), html.br(), html.br()
             )
         
         elif idx == 4:
             return html.section(
-                html.h6("¿Por qué?"),
-                html.textarea({"placeholder":"Ingrese aquí sus comentarios."})
+                html.h6({"style":{"margin-bottom":"10px"}},"¿Por qué?"),
+                html.textarea({"placeholder":"Ingrese aquí sus comentarios.", "style":{"width":"70%", "height":"100px", "resize":"none"}}), html.br(), html.br()
             )
         elif idx == 5:
             return html.section(
-                html.h6("¿En qué podríamos mejorar?"),
-                html.textarea({"placeholder":"Ingrese aquí sus comentarios."})
+                html.h6({"style":{"margin-bottom":"10px"}},"¿En qué podríamos mejorar?"),
+                html.textarea({"placeholder":"Ingrese aquí sus comentarios.", "style":{"width":"70%", "height":"100px", "resize":"none"}}), html.br(), html.br()
             )
+        else:
+            return html.br() #Retornar un salto de línea en caso de no haber necesidad de mostrar el cuadro de texto
     
     return html.section(
         html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(),
-        html.div({"style":{"font-size":"25px"}},
+        html.div({"style":{"font-size":"25px", "margin-left":"28px"}},
             html.label({"style":{"width":"30px"}},
                 html.input({"type":"radio", "name":str(idx+1)}), "Sí"), html.br(), html.br(),
             html.label({"style":{"width":"30px"}},
@@ -77,5 +82,12 @@ def Radio_Question(idx): #Componente de preguntas Sí/No
             
         )
     )
+
+@component
+def Open_Question(idx):
+    return html.section(
+                html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(),
+                html.textarea({"placeholder":"Ingrese aquí sus opiniones.", "style":{"width":"70%", "height":"100px", "margin-left":"28px", "resize":"none"}}), html.br(), html.br()
+            )
 
 configure(app, App)
