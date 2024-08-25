@@ -6,18 +6,36 @@ app = FastAPI()
 with open("./content.json") as content: #Leer las preguntas desde el archivo JSON
     questions = json.load(content)
 
-
+answers=[]
+# current_answer={"id":1, "q1":0, "q2":0, "q3":0,"q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0, "q6_comment":"", "q7":"","q8":""}
 
 @component #Componente principal
 def App():
-
-    def handleRatingChange(idx, newRating): #Función que recibe e imprime el valor de la calificación de cada pregunta de estrellas. Próximamente será usado para almacenar el valor en el diccionario de respuestas.
-        print(idx, newRating)
-    def handleRadioChange(idx, newOption): #Misma función para preguntas Sí/No.
-        print(idx, newOption)
+    current_answer={"id":1}
+    def handleRatingChange(idx, newRating): #Función que recibe y almacena el valor de cada StarQuestion y RadioQuestion en el diccionario current_answer
+        current_answer["q"+str((idx+1))] = int(newRating)
+        print(current_answer)
 
     def handleCommentChange(idx, newComment):
-        print(idx, newComment)
+        current_answer["q"+str((idx+1))+"_comment"] = newComment
+        print(current_answer)
+
+    def handleOpinionChange(idx, newOpinion):
+        current_answer["q"+str((idx+1))] = newOpinion
+        print(current_answer)
+    
+        
+    
+
+    def handleSubmit():
+        apply_answer = current_answer.copy()
+        
+        answers.append(apply_answer)
+        print(answers)
+        
+        return
+        
+        
 
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
         html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
@@ -31,15 +49,13 @@ def App():
             Star_Question(0, handleRatingChange),
             Star_Question(1, handleRatingChange),
             Star_Question(2, handleRatingChange),
-            Radio_Question(3, handleRadioChange, handleCommentChange),
-            Radio_Question(4, handleRadioChange, handleCommentChange),
-            Radio_Question(5, handleRadioChange, handleCommentChange),
-            Open_Question(6),
-            Open_Question(7)
-            
-
-        )
-        
+            Radio_Question(3, handleRatingChange, handleCommentChange),
+            Radio_Question(4, handleRatingChange, handleCommentChange),
+            Radio_Question(5, handleRatingChange, handleCommentChange),
+            Open_Question(6, handleOpinionChange),
+            Open_Question(7, handleOpinionChange)
+        ),
+        html.button({"on_click":lambda x: handleSubmit(),"style":{"height":"50px","width":"20%", "margin-left":"28px","font-size":"20px"}},"ENVIAR")
         ),
     )
 
@@ -79,7 +95,7 @@ def Radio_Question(idx, onRadioChange, onCommentChange): #Componente de pregunta
     def Opinion_Text(): #Función que genera el texto y el input de la opinión libre según el índice de la pregunta y la opción seleccionada
         
 
-        if radio_option == "0":
+        if radio_option == 0:
             return html.section(
                 html.h6({"style":{"margin-bottom":"10px"}}, questions[idx]["opt-text"]),
                 html.textarea({"onchange":commentHandleChange,"placeholder":"Ingrese aquí sus comentarios.", "style":{"width":"70%", "height":"100px", "resize":"none"}}), html.br(), html.br(),
@@ -93,19 +109,23 @@ def Radio_Question(idx, onRadioChange, onCommentChange): #Componente de pregunta
         html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(),
         html.div({"style":{"font-size":"25px", "margin-left":"28px"}},
             html.label({"style":{"width":"30px"}},
-                html.input({"value":"1" if idx != 3 else "0","onchange":radioHandleChange,"type":"radio", "name":str(idx+1)}), "Sí"), html.br(), html.br(),
+                html.input({"value":1 if idx != 3 else 0,"onchange":radioHandleChange,"type":"radio", "name":str(idx+1)}), "Sí"), html.br(), html.br(),
             html.label({"style":{"width":"30px"}},
-                html.input({"value":"0" if idx != 3 else "1","onchange":radioHandleChange,"type":"radio", "name":str(idx+1), "style":{"color":""}}), "No"), html.br(),
+                html.input({"value":0 if idx != 3 else 1,"onchange":radioHandleChange,"type":"radio", "name":str(idx+1), "style":{"color":""}}), "No"), html.br(),
                 Opinion_Text()
             
         )
     )
 
 @component
-def Open_Question(idx):
+def Open_Question(idx, onOpinionChange): #Componente de preguntas abiertas
+
+    def opinionHandleChange(e):
+        onOpinionChange(idx, e["target"]["value"])
+
     return html.section(
                 html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(),
-                html.textarea({"placeholder":"Ingrese aquí sus opiniones.", "style":{"width":"70%", "height":"100px", "margin-left":"28px", "resize":"none"}}), html.br(), html.br()
+                html.textarea({"onchange":opinionHandleChange,"placeholder":"Ingrese aquí sus opiniones.", "style":{"width":"70%", "height":"100px", "margin-left":"28px", "resize":"none"}}), html.br(), html.br()
             )
 
 configure(app, App)
