@@ -13,6 +13,8 @@ def App():
 
     def handleRatingChange(idx, newRating): #Función que recibe e imprime el valor de la calificación de cada pregunta de estrellas. Próximamente será usado para almacenar el valor en el diccionario de respuestas.
         print(idx, newRating)
+    def handleRadioChange(idx, newOption): #Misma función para preguntas Sí/No.
+        print(idx, newOption)
 
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
         html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
@@ -26,9 +28,9 @@ def App():
             Star_Question(0, handleRatingChange),
             Star_Question(1, handleRatingChange),
             Star_Question(2, handleRatingChange),
-            Radio_Question(3),
-            Radio_Question(4),
-            Radio_Question(5),
+            Radio_Question(3, handleRadioChange),
+            Radio_Question(4, handleRadioChange),
+            Radio_Question(5, handleRadioChange),
             Open_Question(6),
             Open_Question(7)
             
@@ -62,10 +64,15 @@ def Star_Question(idx, onRatingChange): #Componente de pregunta de estrellas
 
 
 @component
-def Radio_Question(idx): #Componente de preguntas Sí/No
-    def Opinion_Text(): #Función que genera el texto y el input de la opinión libre según el índice de la pregunta (Próximamente esto solo saldrá cuando se responda de forma negativa a la pregunta)
-        a = 0
-        if a == 0:
+def Radio_Question(idx, onRadioChange): #Componente de preguntas Sí/No
+    radio_option, set_radio_option = hooks.use_state(None)
+    def radioHandleChange(e):
+        set_radio_option(e["target"]["value"])
+        onRadioChange(idx, e["target"]["value"])
+    def Opinion_Text(): #Función que genera el texto y el input de la opinión libre según el índice de la pregunta
+        
+
+        if radio_option == "0":
             return html.section(
                 html.h6({"style":{"margin-bottom":"10px"}}, questions[idx]["opt-text"]),
                 html.textarea({"placeholder":"Ingrese aquí sus comentarios.", "style":{"width":"70%", "height":"100px", "resize":"none"}}), html.br(), html.br(),
@@ -73,13 +80,15 @@ def Radio_Question(idx): #Componente de preguntas Sí/No
         else:
             return html.br() #Retornar un salto de línea en caso de no haber necesidad de mostrar el cuadro de texto
     
+        
+
     return html.section(
         html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(),
         html.div({"style":{"font-size":"25px", "margin-left":"28px"}},
             html.label({"style":{"width":"30px"}},
-                html.input({"type":"radio", "name":str(idx+1)}), "Sí"), html.br(), html.br(),
+                html.input({"value":"1" if idx != 3 else "0","onchange":radioHandleChange,"type":"radio", "name":str(idx+1)}), "Sí"), html.br(), html.br(),
             html.label({"style":{"width":"30px"}},
-                html.input({"type":"radio", "name":str(idx+1), "style":{"color":""}}), "No"), html.br(),
+                html.input({"value":"0" if idx != 3 else "1","onchange":radioHandleChange,"type":"radio", "name":str(idx+1), "style":{"color":""}}), "No"), html.br(),
                 Opinion_Text()
             
         )
