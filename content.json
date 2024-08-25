@@ -13,15 +13,18 @@
   },
   {
     "id":4,
-    "text": "¿Presentaste alguna inconformidad de algún tipo con nuestro servicio?"
+    "text": "¿Presentaste alguna inconformidad de algún tipo con nuestro servicio?",
+    "opt-text": "¿Podría describirnos su inconformidad?"
   },
   {
     "id":5,
-    "text": "¿Volvería a usar nuestro servicio?"
+    "text": "¿Volvería a usar nuestro servicio?",
+    "opt-text": "¿Por qué?"
   },
   {
     "id":6,
-    "text":"¿Considera que nuestros servicios cumplen con sus expectativas?"
+    "text":"¿Considera que nuestros servicios cumplen con sus expectativas?",
+    "opt-text": "¿En qué podríamos mejorar?"
   },
   {
     "id":7,
