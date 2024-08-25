@@ -11,7 +11,7 @@ with open("./content.json") as content: #Leer las preguntas desde el archivo JSO
 @component #Componente principal
 def App():
 
-    def handleRatingChange(idx, newRating):
+    def handleRatingChange(idx, newRating): #Función que recibe e imprime el valor de la calificación de cada pregunta de estrellas. Próximamente será usado para almacenar el valor en el diccionario de respuestas.
         print(idx, newRating)
 
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
@@ -44,18 +44,18 @@ def Star_Question(idx, onRatingChange): #Componente de pregunta de estrellas
     not_selected = "https://i.ibb.co/RptMG5X/Tabler-Star-Uns.png"
     selected = "https://i.ibb.co/MPfkd9c/Tabler-Star.png"
 
-    def handleStarClick(rating): #Función para establecer la calificación de l actual pregunta y pasarle el valor al componente App
+    def handleStarClick(rating): #Función para establecer la calificación de la actual pregunta y pasarle el valor al componente App
         set_rating(rating)
         onRatingChange(idx, rating)
         
     return html.section( #Contenedor principal de la pregunta
         html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(), #Número y texto de la pregunta
         html.div({"style":{"display":"flex", "gap":"20px"}}, #Contenedor de las estrellas
-            html.img({"on_click":lambda x: handleStarClick(1),"src":not_selected, "style":{"width":"30px", "margin-left":"28px", "cursor":"pointer"}}),
-            html.img({"on_click":lambda x: handleStarClick(2),"src":not_selected, "style":{"width":"30px", "cursor":"pointer"}}),
-            html.img({"on_click":lambda x: handleStarClick(3),"src":not_selected, "style":{"width":"30px", "cursor":"pointer"}}),
-            html.img({"on_click":lambda x: handleStarClick(4),"src":not_selected, "style":{"width":"30px", "cursor":"pointer"}}),
-            html.img({"on_click":lambda x: handleStarClick(5),"src":not_selected, "style":{"width":"30px", "cursor":"pointer"}})
+            html.img({"on_click":lambda x: handleStarClick(1),"src":not_selected if rating < 1 else selected, "style":{"width":"30px", "margin-left":"28px", "cursor":"pointer"}}),
+            html.img({"on_click":lambda x: handleStarClick(2),"src":not_selected if rating < 2 else selected, "style":{"width":"30px", "cursor":"pointer"}}),
+            html.img({"on_click":lambda x: handleStarClick(3),"src":not_selected if rating < 3 else selected, "style":{"width":"30px", "cursor":"pointer"}}),
+            html.img({"on_click":lambda x: handleStarClick(4),"src":not_selected if rating < 4 else selected, "style":{"width":"30px", "cursor":"pointer"}}),
+            html.img({"on_click":lambda x: handleStarClick(5),"src":not_selected if rating < 5 else selected, "style":{"width":"30px", "cursor":"pointer"}})
         ), html.br(), html.br()
     )
 
