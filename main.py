@@ -1,5 +1,4 @@
 import json
-
 from reactpy import component, html, hooks
 from reactpy.backend.fastapi import configure
 from fastapi import FastAPI
@@ -42,28 +41,43 @@ def App():
         return
         
         
-
-    return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
-        html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
-            html.header( #Encabezado de la página
-            {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
-            html.h1("Encuesta de satisfacción del usuario")
-        ),
-        html.p({"style":{"color":"#454545"}},"Tu opinión es muy importante para nosotros, por lo tanto nos gustaría que respondas la siguiente encuesta de satisfacción. Gracias por usar nuestros servicios, usamos tus opiniones para mejorar cada día y ofrecer un mejor servicio."),
-        html.h2("Selecciona la cantidad de estrellas en una calificación de 1 a 5"),
-        html.div( #Contenedor de las preguntas
-            Star_Question(0, handleRatingChange, reset),
-            Star_Question(1, handleRatingChange, reset),
-            Star_Question(2, handleRatingChange, reset),
-            Radio_Question(3, handleRatingChange, handleCommentChange, reset),
-            Radio_Question(4, handleRatingChange, handleCommentChange, reset),
-            Radio_Question(5, handleRatingChange, handleCommentChange, reset),
-            Open_Question(6, handleOpinionChange, reset),
-            Open_Question(7, handleOpinionChange, reset)
-        ),
-        html.button({"on_click":lambda x: handleSubmit(),"style":{"height":"50px","width":"20%", "margin-left":"28px","font-size":"20px"}},"ENVIAR")
-        ),
-    )
+    if reset:
+        
+        return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
+            html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
+                html.header( #Encabezado de la página
+                {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
+                html.h1("Encuesta de satisfacción del usuario")
+            ),html.p({"style":{"color":"#454545"}},"¡Felicidades! Has terminado de rellenar nuestra encuesta de satisfacción, tus opiniones son de gran importancia para nosotros. ¡Gracias! "),
+            html.h3("Decide si mirar los resultados de las encuestas o recoger otra respuesta: "),
+            html.section({"style":{"display":"flex"}},
+                html.button({"style":{"height":"50px","width":"20%", "margin-left":"0%","font-size":"20px"}},"Mirar resultados"),
+                html.button({"on_click":lambda x: set_reset(False),"style":{"height":"50px","width":"300px", "margin-left":"50%","font-size":"20px"}},"Recoger otra respuesta"))
+            )
+            )
+        
+    else:
+        return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
+            html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
+                html.header( #Encabezado de la página
+                {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
+                html.h1("Encuesta de satisfacción del usuario")
+            ),
+            html.p({"style":{"color":"#454545"}},"Tu opinión es muy importante para nosotros, por lo tanto nos gustaría que respondas la siguiente encuesta de satisfacción. Gracias por usar nuestros servicios, usamos tus opiniones para mejorar cada día y ofrecer un mejor servicio."),
+            html.h2("Selecciona la cantidad de estrellas en una calificación de 1 a 5"),
+            html.div( #Contenedor de las preguntas
+                Star_Question(0, handleRatingChange, reset),
+                Star_Question(1, handleRatingChange, reset),
+                Star_Question(2, handleRatingChange, reset),
+                Radio_Question(3, handleRatingChange, handleCommentChange, reset),
+                Radio_Question(4, handleRatingChange, handleCommentChange, reset),
+                Radio_Question(5, handleRatingChange, handleCommentChange, reset),
+                Open_Question(6, handleOpinionChange, reset),
+                Open_Question(7, handleOpinionChange, reset)
+            ),
+            html.button({"on_click":lambda x: handleSubmit(),"style":{"height":"50px","width":"20%", "margin-left":"28px","font-size":"20px"}},"ENVIAR")
+            ),
+        )
 
 @component
 def Star_Question(idx, onRatingChange, isReset): #Componente de pregunta de estrellas
