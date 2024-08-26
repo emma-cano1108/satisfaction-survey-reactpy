@@ -1,4 +1,6 @@
 import json
+from copy import deepcopy
+import statistics
 from fastapi.staticfiles import StaticFiles
 from reactpy import component, html, hooks
 from reactpy.backend.fastapi import configure
@@ -13,6 +15,7 @@ answers=[]
 
 @component #Componente principal
 def App():
+    
     current_answer, set_current_answer = hooks.use_state({"id":1})
     reset, set_reset = hooks.use_state(True)
     is_valid, set_is_valid = hooks.use_state(None)
@@ -20,7 +23,6 @@ def App():
     results, set_results = hooks.use_state(False)
     def handleRatingChange(idx, newRating): #Funciones que reciben y almacenan el valor de cada pregunta y lo almacenan en current_answer
         current_answer["q"+str((idx+1))] = int(newRating)
-        print(current_answer)
 
 
     def handleCommentChange(idx, newComment):
@@ -62,6 +64,7 @@ def App():
         set_is_valid(None)
     def handleResultsPage(): #Función para salir de la página de resultados
         set_results(False)
+    
     if reset:
         if results:
             return ResultsPage(handleResultsPage)
@@ -158,9 +161,9 @@ def Radio_Question(idx, onRadioChange, onCommentChange, isReset): #Componente de
         html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(),
         html.div({"style":{"font-size":"25px", "margin-left":"28px"}},
             html.label({"style":{"width":"30px"}},
-                html.input({"value":1 if idx != 3 else 0,"onchange":radioHandleChange,"type":"radio", "name":str(idx+1), "checked":False if isReset else None}), "Sí"), html.br(), html.br(),
+                html.input({"value":5 if idx != 3 else 0,"onchange":radioHandleChange,"type":"radio", "name":str(idx+1), "checked":False if isReset else None}), "Sí"), html.br(), html.br(),
             html.label({"style":{"width":"30px"}},
-                html.input({"value":0 if idx != 3 else 1,"onchange":radioHandleChange,"type":"radio", "name":str(idx+1), "checked":False if isReset else None}), "No"), html.br(),
+                html.input({"value":0 if idx != 3 else 5,"onchange":radioHandleChange,"type":"radio", "name":str(idx+1), "checked":False if isReset else None}), "No"), html.br(),
                 Opinion_Text()
             
         )
@@ -183,9 +186,9 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
     #Calificación de calidad del producto: Q1, Q3, Q4, Q5, Q6
     #Clientes que recomendarían el producto: Q2, Q5, Q6
     #Experiencia general: Q1, Q2, Q4, Q6
-    quality_answers = answers.copy()
-
-    for i in range(len(answers)):
+    quality_answers = deepcopy(answers)
+    quality_list = []
+    for i in range(len(answers)): #Bucle para seleccionar únicamente las respuestas con valor para calificación de calidad y guardarlas en una lista
         if "id" in quality_answers[i].keys():
             del quality_answers[i]["id"]
         if "q2" in quality_answers[i].keys():
@@ -194,9 +197,14 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             del quality_answers[i]["q7"]
         if "q8" in quality_answers[i].keys():
             del quality_answers[i]["q8"]
-        print(list(quality_answers[i].values()))
-    print(answers)
-    print(quality_answers)
+        for j in list(quality_answers[i].values()):
+            if type(j) != str:
+                quality_list.append(j)
+        
+    print("a",answers)
+    print("qa",quality_answers)
+    print("list",quality_list)
+    print("promedio",statistics.mean(quality_list))
         
     
     
