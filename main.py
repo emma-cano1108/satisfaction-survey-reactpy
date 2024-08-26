@@ -224,8 +224,14 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             if type(j) != str:
                 recommend_list.append(j)
         
+    def isRecommended(x):
+        if x >= 3:
+            return True
+        return False
+    recommended_users = len(list(filter(isRecommended, recommend_list)))
     recommend_total = len(recommend_list)
     print(recommend_total)
+    print(recommended_users)
     
     
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
