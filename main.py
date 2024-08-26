@@ -204,6 +204,28 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
                 quality_list.append(j)
         
     quality_average = round(statistics.mean(quality_list), 2)
+
+    recommend_answers = deepcopy(answers)
+    recommend_list = []
+    for i in range(len(answers)): #Bucle para seleccionar únicamente las respuestas con valor para calificación de calidad y guardarlas en una lista
+        if "id" in recommend_answers[i].keys():
+            del recommend_answers[i]["id"]
+        if "q1" in recommend_answers[i].keys():
+            del recommend_answers[i]["q1"]
+        if "q3" in recommend_answers[i].keys():
+            del recommend_answers[i]["q3"]
+        if "q4" in recommend_answers[i].keys():
+            del recommend_answers[i]["q4"]
+        if "q7" in recommend_answers[i].keys():
+            del recommend_answers[i]["q7"]
+        if "q8" in recommend_answers[i].keys():
+            del recommend_answers[i]["q8"]
+        for j in list(recommend_answers[i].values()):
+            if type(j) != str:
+                recommend_list.append(j)
+        
+    recommend_total = len(recommend_list)
+    print(recommend_total)
     
     
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
@@ -217,6 +239,8 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             html.p({"style":{"color":"#454545"}},"En esta sección podrás consultar el promedio de los resultados recogidos y mirar todas las respuestas recopiladas"),
             html.h3("Calificación de calidad del producto: "),
             html.h2(f"Promedio: {quality_average}"),
+            html.h3("Índice de recomendacion del producto: "),
+            html.h2(f"Porcentaje: "),
             html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"VOLVER")
             )
             )
