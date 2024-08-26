@@ -1,4 +1,5 @@
 import json
+import time
 from reactpy import component, html, hooks
 from reactpy.backend.fastapi import configure
 from fastapi import FastAPI
@@ -13,6 +14,8 @@ answers=[]
 def App():
     current_answer, set_current_answer = hooks.use_state({"id":1})
     reset, set_reset = hooks.use_state(False)
+    is_valid, set_is_valid = hooks.use_state(None)
+    button_is_valid, set_button_is_valid = hooks.use_state(True)
     def handleRatingChange(idx, newRating): #Función que recibe y almacena el valor de cada StarQuestion y RadioQuestion en el diccionario current_answer
         current_answer["q"+str((idx+1))] = int(newRating)
         print(current_answer)
@@ -25,22 +28,39 @@ def App():
         current_answer["q"+str((idx+1))] = newOpinion
         print(current_answer)
     
-        
-    
-
+    def formValidation():
+        sum = 0
+        sum_c = 0
+        for i in range(len(questions)):
+            v = list(current_answer.keys()).count("q"+str(i+1))
+            # vc = list(current_answer.keys()).count("q"+str(i+1)+"_comment")
+            sum += v
+            # sum_c += vc
+        if sum != 8:
+            set_is_valid(False)
+        else:
+            set_is_valid(True)
+        print(is_valid)
     def handleSubmit(): #Función para guardar las respuestas en la lista answers y reiniciar el valor de current_answer
+        formValidation()
         
-        apply_answer = current_answer.copy()
+        if is_valid:
+            apply_answer = current_answer.copy()
 
-        answers.append(apply_answer)
-
-        print(answers)
-        
-        set_current_answer({"id":current_answer["id"]+1})
-        set_reset(True)
+            answers.append(apply_answer)
+            print(answers)
+            
+            
+            set_current_answer({"id":current_answer["id"]+1})
+            set_reset(True)
+            set_button_is_valid(True)
+        else:
+            set_button_is_valid(False)
         return
-        
-        
+    
+    def handleGeneralReset():
+        set_reset(False)
+        set_is_valid(None)
     if reset:
         
         return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
@@ -52,7 +72,7 @@ def App():
             html.h3("Decide si mirar los resultados de las encuestas o recoger otra respuesta: "),
             html.section({"style":{"display":"flex"}},
                 html.button({"style":{"height":"50px","width":"20%", "margin-left":"0%","font-size":"20px"}},"Mirar resultados"),
-                html.button({"on_click":lambda x: set_reset(False),"style":{"height":"50px","width":"300px", "margin-left":"50%","font-size":"20px"}},"Recoger otra respuesta"))
+                html.button({"on_click":lambda x: handleGeneralReset(),"style":{"height":"50px","width":"300px", "margin-left":"50%","font-size":"20px"}},"Recoger otra respuesta"))
             )
             )
         
@@ -75,7 +95,7 @@ def App():
                 Open_Question(6, handleOpinionChange, reset),
                 Open_Question(7, handleOpinionChange, reset)
             ),
-            html.button({"on_click":lambda x: handleSubmit(),"style":{"height":"50px","width":"20%", "margin-left":"28px","font-size":"20px"}},"ENVIAR")
+            html.button({"on_click":lambda x: handleSubmit(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"ENVIAR" if button_is_valid else "RELLENE TODOS LOS CAMPOS")
             ),
         )
 
