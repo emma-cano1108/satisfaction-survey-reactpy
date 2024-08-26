@@ -20,7 +20,7 @@ def App():
     reset, set_reset = hooks.use_state(True)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
-    results, set_results = hooks.use_state(False)
+    results, set_results = hooks.use_state(True)
     def handleRatingChange(idx, newRating): #Funciones que reciben y almacenan el valor de cada pregunta y lo almacenan en current_answer
         current_answer["q"+str((idx+1))] = int(newRating)
 
@@ -204,7 +204,7 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
     print("a",answers)
     print("qa",quality_answers)
     print("list",quality_list)
-    print("promedio",statistics.mean(quality_list))
+    #print("promedio",statistics.mean(quality_list))
         
     
     
@@ -216,7 +216,11 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
                 html.h1("Encuesta de satisfacción del usuario"),
                 
             ),
-            html.p(),
+            html.p({"style":{"color":"#454545"}},"En esta sección podrás consultar el promedio de los resultados recogidos y mirar todas las respuestas recopiladas"),
+            html.h3("Calificación de calidad del producto: "),
+            html.ul(
+                *[html.li(answer) for answer in quality_list]
+            ),
             html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"VOLVER")
             )
             )
