@@ -14,7 +14,7 @@ answers=[]
 @component #Componente principal
 def App():
     current_answer, set_current_answer = hooks.use_state({"id":1})
-    reset, set_reset = hooks.use_state(None)
+    reset, set_reset = hooks.use_state(True)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
     results, set_results = hooks.use_state(False)
@@ -22,13 +22,14 @@ def App():
         current_answer["q"+str((idx+1))] = int(newRating)
         print(current_answer)
 
+
     def handleCommentChange(idx, newComment):
         current_answer["q"+str((idx+1))+"_comment"] = newComment
-        print(current_answer)
+
 
     def handleOpinionChange(idx, newOpinion):
         current_answer["q"+str((idx+1))] = newOpinion
-        print(current_answer)
+
 
     def formValidation(): #Validación para evitar que se envíe el formulario sin haber respondido las preguntas obligatorias
         sum = 0
@@ -39,7 +40,7 @@ def App():
             set_is_valid(False)
         else:
             set_is_valid(True)
-        print(is_valid)
+
     def handleSubmit(): #Función para guardar las respuestas en la lista answers y reiniciar el valor de current_answer
         formValidation()
         
@@ -47,7 +48,6 @@ def App():
             apply_answer = current_answer.copy()
 
             answers.append(apply_answer)
-            print(answers)
             
             
             set_current_answer({"id":current_answer["id"]+1})
@@ -60,9 +60,11 @@ def App():
     def handleGeneralReset(): #Función de reinicio general para volver a recoger respuestas
         set_reset(False)
         set_is_valid(None)
+    def handleResultsPage(): #Función para salir de la página de resultados
+        set_results(False)
     if reset:
         if results:
-            return ResultsPage()
+            return ResultsPage(handleResultsPage)
         else: 
             return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
                 html.main({"style":{"margin-left":"15vw","width":"65vw"}},
@@ -177,8 +179,26 @@ def Open_Question(idx, onOpinionChange, isReset): #Componente de preguntas abier
             )
 
 @component
-def ResultsPage():
+def ResultsPage(onResultsChange): #Componente de Página de resultados
+    #Calificación de calidad del producto: Q1, Q3, Q4, Q5, Q6
+    #Clientes que recomendarían el producto: Q2, Q5, Q6
+    #Experiencia general: Q1, Q2, Q4, Q6
+    quality_answers = answers.copy()
 
+    for i in range(len(answers)):
+        if "id" in quality_answers[i].keys():
+            del quality_answers[i]["id"]
+        if "q2" in quality_answers[i].keys():
+            del quality_answers[i]["q2"]
+        if "q7" in quality_answers[i].keys():
+            del quality_answers[i]["q7"]
+        if "q8" in quality_answers[i].keys():
+            del quality_answers[i]["q8"]
+        print(list(quality_answers[i].values()))
+    print(answers)
+    print(quality_answers)
+        
+    
     
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
             html.main({"style":{"margin-left":"15vw","width":"65vw"}},
@@ -188,8 +208,8 @@ def ResultsPage():
                 html.h1("Encuesta de satisfacción del usuario"),
                 
             ),
-            html.p(f"{answers}"),
-            html.button({"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"VOLVER")
+            html.p(),
+            html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"VOLVER")
             )
             )
 configure(app, App)
