@@ -228,10 +228,11 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
         if x >= 3:
             return True
         return False
-    recommended_users = len(list(filter(isRecommended, recommend_list)))
+    positive_recommends = len(list(filter(isRecommended, recommend_list)))
     recommend_total = len(recommend_list)
     print(recommend_total)
-    print(recommended_users)
+    print(positive_recommends)
+    recommends_percentage = (positive_recommends/recommend_total)*100
     
     
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
@@ -246,7 +247,7 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             html.h3("Calificación de calidad del producto: "),
             html.h2(f"Promedio: {quality_average}"),
             html.h3("Índice de recomendacion del producto: "),
-            html.h2(f"Porcentaje: "),
+            html.h2(f"Porcentaje: {recommends_percentage}, %"),
             html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"VOLVER")
             )
             )
