@@ -1,9 +1,10 @@
 import json
-import time
+from fastapi.staticfiles import StaticFiles
 from reactpy import component, html, hooks
 from reactpy.backend.fastapi import configure
 from fastapi import FastAPI
 app = FastAPI()
+app.mount("/static", StaticFiles(directory="static"), name="static")
 with open("./content.json") as content: #Leer las preguntas desde el archivo JSON
     questions = json.load(content)
 
@@ -27,7 +28,7 @@ def App():
     def handleOpinionChange(idx, newOpinion):
         current_answer["q"+str((idx+1))] = newOpinion
         print(current_answer)
-    
+
     def formValidation(): #Validación para evitar que se envíe el formulario sin haber respondido las preguntas obligatorias
         sum = 0
         for i in range(len(questions)):
@@ -62,6 +63,7 @@ def App():
         
         return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
             html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
+                html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
                 html.header( #Encabezado de la página
                 {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
                 html.h1("Encuesta de satisfacción del usuario")
@@ -76,6 +78,7 @@ def App():
     else:
         return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
             html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
+                html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
                 html.header( #Encabezado de la página
                 {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
                 html.h1("Encuesta de satisfacción del usuario")
