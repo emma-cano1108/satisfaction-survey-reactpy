@@ -20,7 +20,7 @@ def App():
     reset, set_reset = hooks.use_state(True)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
-    results, set_results = hooks.use_state(True)
+    results, set_results = hooks.use_state(False)
     def handleRatingChange(idx, newRating): #Funciones que reciben y almacenan el valor de cada pregunta y lo almacenan en current_answer
         current_answer["q"+str((idx+1))] = int(newRating)
 
@@ -103,7 +103,7 @@ def App():
                 Open_Question(6, handleOpinionChange, reset),
                 Open_Question(7, handleOpinionChange, reset)
             ),
-            html.button({"on_click":lambda x: handleSubmit(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"ENVIAR" if button_is_valid else "RELLENE TODOS LOS CAMPOS")
+            html.button({"on_click":lambda x: handleSubmit(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"ENVIAR" if button_is_valid else "¿ESTAS SEGURO?")
             ),
         )
 
@@ -183,9 +183,9 @@ def Open_Question(idx, onOpinionChange, isReset): #Componente de preguntas abier
 
 @component
 def ResultsPage(onResultsChange): #Componente de Página de resultados
-    #Calificación de calidad del producto: Q1, Q3, Q4, Q5, Q6
+    #Calificación de calidad del producto: Q1, Q4, Q5, Q6
     #Clientes que recomendarían el producto: Q2, Q5, Q6
-    #Experiencia general: Q1, Q2, Q4, Q6
+    #Experiencia general: conteo de respuestas totales y promedio de los puntos anteriores, clasificacion en buena o mala experiencia segun el resultado
     quality_answers = deepcopy(answers)
     quality_list = []
     for i in range(len(answers)): #Bucle para seleccionar únicamente las respuestas con valor para calificación de calidad y guardarlas en una lista
@@ -193,6 +193,8 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             del quality_answers[i]["id"]
         if "q2" in quality_answers[i].keys():
             del quality_answers[i]["q2"]
+        if "q3" in quality_answers[i].keys():
+            del quality_answers[i]["q3"]
         if "q7" in quality_answers[i].keys():
             del quality_answers[i]["q7"]
         if "q8" in quality_answers[i].keys():
@@ -201,11 +203,7 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             if type(j) != str:
                 quality_list.append(j)
         
-    print("a",answers)
-    print("qa",quality_answers)
-    print("list",quality_list)
-    #print("promedio",statistics.mean(quality_list))
-        
+    quality_average = round(statistics.mean(quality_list), 2)
     
     
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
@@ -218,9 +216,7 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             ),
             html.p({"style":{"color":"#454545"}},"En esta sección podrás consultar el promedio de los resultados recogidos y mirar todas las respuestas recopiladas"),
             html.h3("Calificación de calidad del producto: "),
-            html.ul(
-                *[html.li(answer) for answer in quality_list]
-            ),
+            html.h2(f"Promedio: {quality_average}"),
             html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"VOLVER")
             )
             )
