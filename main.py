@@ -14,9 +14,10 @@ answers=[]
 @component #Componente principal
 def App():
     current_answer, set_current_answer = hooks.use_state({"id":1})
-    reset, set_reset = hooks.use_state(False)
+    reset, set_reset = hooks.use_state(True)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
+    results, set_results = hooks.use_state(False)
     def handleRatingChange(idx, newRating): #Funciones que reciben y almacenan el valor de cada pregunta y lo almacenan en current_answer
         current_answer["q"+str((idx+1))] = int(newRating)
         print(current_answer)
@@ -60,20 +61,22 @@ def App():
         set_reset(False)
         set_is_valid(None)
     if reset:
-        
-        return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
-            html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
-                html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
-                html.header( #Encabezado de la página
-                {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
-                html.h1("Encuesta de satisfacción del usuario")
-            ),html.p({"style":{"color":"#454545"}},"¡Felicidades! Has terminado de rellenar nuestra encuesta de satisfacción, tus opiniones son de gran importancia para nosotros. ¡Gracias! "),
-            html.h3("Decide si mirar los resultados de las encuestas o recoger otra respuesta: "),
-            html.section({"style":{"display":"flex"}},
-                html.button({"style":{"height":"50px","width":"20%", "margin-left":"0%","font-size":"20px"}},"Mirar resultados"),
-                html.button({"on_click":lambda x: handleGeneralReset(),"style":{"height":"50px","width":"300px", "margin-left":"50%","font-size":"20px"}},"Recoger otra respuesta"))
-            )
-            )
+        if results:
+            return ResultsPage()
+        else: 
+            return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
+                html.main({"style":{"margin-left":"15vw","width":"65vw"}},
+                    html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
+                    html.header( #Encabezado de la página
+                    {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
+                    html.h1("Encuesta de satisfacción del usuario")
+                ),html.p({"style":{"color":"#454545"}},"¡Felicidades! Has terminado de rellenar nuestra encuesta de satisfacción, tus opiniones son de gran importancia para nosotros. ¡Gracias! "),
+                html.h3("Decide si mirar los resultados de las encuestas o recoger otra respuesta: "),
+                html.section({"style":{"display":"flex"}},
+                    html.button({"on_click":lambda x: set_results(True),"style":{"height":"50px","width":"20%", "margin-left":"0%","font-size":"20px"}},"Mirar resultados"),
+                    html.button({"on_click":lambda x: handleGeneralReset(),"style":{"height":"50px","width":"300px", "margin-left":"50%","font-size":"20px"}},"Recoger otra respuesta"))
+                )
+                )
         
     else:
         return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
@@ -173,4 +176,15 @@ def Open_Question(idx, onOpinionChange, isReset): #Componente de preguntas abier
                 html.textarea({"value":opinion if not isReset else "","onchange":opinionHandleChange,"placeholder":"Ingrese aquí sus opiniones.", "style":{"width":"70%", "height":"100px", "margin-left":"28px", "resize":"none"}}), html.br(), html.br()
             )
 
+@component
+def ResultsPage():
+    return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
+            html.main({"style":{"margin-left":"15vw","width":"65vw"}},
+                html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
+                html.header( #Encabezado de la página
+                {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
+                html.h1("Encuesta de satisfacción del usuario")
+            )
+            )
+            )
 configure(app, App)
