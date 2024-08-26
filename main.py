@@ -45,7 +45,7 @@ def App():
 
     def handleSubmit(): #Función para guardar las respuestas en la lista answers y reiniciar el valor de current_answer
         formValidation()
-        
+
         if is_valid:
             apply_answer = current_answer.copy()
 
@@ -207,6 +207,7 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
 
     recommend_answers = deepcopy(answers)
     recommend_list = []
+    recommend_list_element = []
     for i in range(len(answers)): #Bucle para seleccionar únicamente las respuestas con valor para calificación de calidad y guardarlas en una lista
         if "id" in recommend_answers[i].keys():
             del recommend_answers[i]["id"]
@@ -222,17 +223,23 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             del recommend_answers[i]["q8"]
         for j in list(recommend_answers[i].values()):
             if type(j) != str:
-                recommend_list.append(j)
+               recommend_list_element.append(j)
+        recommend_list.append(recommend_list_element)
+       
         
-    def isRecommended(x):
-        if x >= 3:
-            return True
-        return False
-    positive_recommends = len(list(filter(isRecommended, recommend_list)))
-    recommend_total = len(recommend_list)
-    print(recommend_total)
-    print(positive_recommends)
-    recommends_percentage = (positive_recommends/recommend_total)*100
+            
+        
+    # def isRecommended(x):
+    #     for i in len(recommend_list):
+    #         if 
+    #     if x >= 3:
+    #         return True
+    #     return False
+    # positive_recommends = len(list(filter(isRecommended, recommend_list)))
+
+    # recommend_total = len(recommend_list)
+    print(recommend_list)
+    # recommends_percentage = round((positive_recommends/recommend_total)*100, 2)
     
     
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
@@ -247,7 +254,8 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             html.h3("Calificación de calidad del producto: "),
             html.h2(f"Promedio: {quality_average}"),
             html.h3("Índice de recomendacion del producto: "),
-            html.h2(f"Porcentaje: {recommends_percentage}, %"),
+            # html.h2(f"Porcentaje: {recommends_percentage}%"),
+            html.p({"style":{"color":"#454545"}}, f" /{len(answers)} encuestados recomiendan el producto"),
             html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"VOLVER")
             )
             )
