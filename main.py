@@ -14,7 +14,7 @@ answers=[]
 @component #Componente principal
 def App():
     current_answer, set_current_answer = hooks.use_state({"id":1})
-    reset, set_reset = hooks.use_state(True)
+    reset, set_reset = hooks.use_state(None)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
     results, set_results = hooks.use_state(False)
@@ -178,13 +178,18 @@ def Open_Question(idx, onOpinionChange, isReset): #Componente de preguntas abier
 
 @component
 def ResultsPage():
+
+    
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
             html.main({"style":{"margin-left":"15vw","width":"65vw"}},
                 html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
                 html.header( #Encabezado de la página
                 {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
-                html.h1("Encuesta de satisfacción del usuario")
-            )
+                html.h1("Encuesta de satisfacción del usuario"),
+                
+            ),
+            html.p(f"{answers}"),
+            html.button({"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"VOLVER")
             )
             )
 configure(app, App)
