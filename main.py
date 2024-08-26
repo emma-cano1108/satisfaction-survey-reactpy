@@ -16,7 +16,7 @@ def App():
     reset, set_reset = hooks.use_state(False)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
-    def handleRatingChange(idx, newRating): #Función que recibe y almacena el valor de cada StarQuestion y RadioQuestion en el diccionario current_answer
+    def handleRatingChange(idx, newRating): #Funciones que reciben y almacenan el valor de cada pregunta y lo almacenan en current_answer
         current_answer["q"+str((idx+1))] = int(newRating)
         print(current_answer)
 
@@ -28,14 +28,11 @@ def App():
         current_answer["q"+str((idx+1))] = newOpinion
         print(current_answer)
     
-    def formValidation():
+    def formValidation(): #Validación para evitar que se envíe el formulario sin haber respondido las preguntas obligatorias
         sum = 0
-        sum_c = 0
         for i in range(len(questions)):
             v = list(current_answer.keys()).count("q"+str(i+1))
-            # vc = list(current_answer.keys()).count("q"+str(i+1)+"_comment")
             sum += v
-            # sum_c += vc
         if sum != 8:
             set_is_valid(False)
         else:
@@ -58,7 +55,7 @@ def App():
             set_button_is_valid(False)
         return
     
-    def handleGeneralReset():
+    def handleGeneralReset(): #Función de reinicio general para volver a recoger respuestas
         set_reset(False)
         set_is_valid(None)
     if reset:
