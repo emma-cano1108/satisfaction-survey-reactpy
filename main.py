@@ -11,7 +11,7 @@ with open("./content.json") as content: #Leer las preguntas desde el archivo JSO
     questions = json.load(content)
 
 answers=[]
-# current_answer={"id":1, "q1":0, "q2":0, "q3":0,"q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0, "q6_comment":"", "q7":"","q8":""}
+
 
 @component #Componente principal
 def App():
@@ -27,7 +27,10 @@ def App():
 
 
     def handleCommentChange(idx, newComment):
-        current_answer["q"+str((idx+1))+"_comment"] = newComment
+        if newComment:
+            current_answer["q"+str((idx+1))+"_comment"] = newComment
+            return
+        current_answer["q"+str((idx+1))+"_comment"] = "n/a"    
 
 
     def handleOpinionChange(idx, newOpinion):
@@ -76,7 +79,7 @@ def App():
         set_results(False)
         set_all_results(True)
     
-    
+    print(answers)
     if reset:
         if results:
             return ResultsPage(handleResultsPage, handleAllResultsPage)
@@ -298,7 +301,21 @@ def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de 
                 )
                 )
     
+
+comments_list = []
 @component
+def QuestionsAndAnswers():
+    return html.section(
+        *map(lambda question: html.div(
+            html.h3(f"{question["id"]}. {question["text"]}"),
+            *map(lambda answer: html.h4(f"Calificación: {answer["q"+str(question["id"])]}"), answers),
+            ), questions)
+            
+        
+    )
+
+
+
 def AllResultsPage(onAllResultsChange):
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
                 html.main({"style":{"margin-left":"15vw","width":"65vw"}},
@@ -312,11 +329,14 @@ def AllResultsPage(onAllResultsChange):
                 html.ul({"style":{"list-style":"none"}},
                 *map(lambda answer: html.li({"key":answer["id"]},
                     html.h2(f"ENCUESTADO #{answer["id"]}"),
-                    html.h3(f"{questions[0][""]}")
+                    QuestionsAndAnswers(),
+                    html.h2("Comentarios"),
+                    #html.h3(f"{questions[4]["opt-text"]}"),
+                    #html.h4(f"-{answer["q4_comment"]}")
+                    
                 ), answers)),
-                html.section({"style":{"display":"flex"}},
-                    html.button({"on_click":lambda x: onAllResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"Recoger otra respuesta")
-                )
+                html.button({"on_click":lambda x: onAllResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"Recoger otra respuesta")
+                
                 
                 )
                 )
