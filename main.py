@@ -221,25 +221,21 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
         if "q8" in recommend_answers[i].keys():
             del recommend_answers[i]["q8"]
     for j in list(recommend_answers[i].values()):
-        if type(j) != str:
+        if type(j) != str and j >= 3:
             recommend_list_element.append(j)
-    recommend_list.append(recommend_list_element)
-       
-        
-            
-        
-    # def isRecommended(x):
-    #     for i in len(recommend_list):
-    #         if 
-    #     if x >= 3:
-    #         return True
-    #     return False
-    # positive_recommends = len(list(filter(isRecommended, recommend_list)))
-
-    # recommend_total = len(recommend_list)
-    print("2",recommend_list)
-    # recommends_percentage = round((positive_recommends/recommend_total)*100, 2)
+    if recommend_list_element and len(recommend_list_element) >= 2:
+        recommend_list.append(recommend_list_element)
     
+    print(recommend_list)
+    recommends_percentage = round((len(recommend_list)/len(answers))*100, 1)
+
+            
+            
+            
+
+    
+
+
     
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
             html.main({"style":{"margin-left":"15vw","width":"65vw"}},
@@ -253,8 +249,8 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             html.h3("Calificación de calidad del producto: "),
             html.h2(f"Promedio: {quality_average}"),
             html.h3("Índice de recomendacion del producto: "),
-            # html.h2(f"Porcentaje: {recommends_percentage}%"),
-            html.p({"style":{"color":"#454545"}}, f" /{len(answers)} encuestados recomiendan el producto"),
+            html.h2(f"Porcentaje: {recommends_percentage}%"),
+            html.p({"style":{"color":"#454545"}}, f"{len(recommend_list)}/{len(answers)} encuestados recomiendan el producto"),
             html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"VOLVER")
             )
             )
