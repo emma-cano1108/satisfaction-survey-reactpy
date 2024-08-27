@@ -89,6 +89,7 @@ def App():
     else:
         return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
             html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
+                      
                 html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
                 html.header( #Encabezado de la página
                 {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
@@ -229,14 +230,26 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
     
     print(recommend_list)
     recommends_percentage = round((len(recommend_list)/len(answers))*100, 1)
-    experience_answers = deepcopy(answers)
     
     #Experiencia general: Respuestas totales__. Experiencia general: Positiva: __ encuestados. Negativa: ___ encuestados.
+    experience_answers = deepcopy(answers)
+    positive_experience_list_element = []
     for i in range(len(answers)):
         if "id" in experience_answers[i].keys():
             del experience_answers[i]["id"]
-    
-    #print(experience_answers)
+        if "q7" in experience_answers[i].keys():
+            del experience_answers[i]["q7"]
+        if "q8" in experience_answers[i].keys():
+            del experience_answers[i]["q8"]
+    for j in list(experience_answers[i].values()):
+        if type(j) != str and j >= 3:
+            positive_experience_list_element.append(j)
+    if positive_experience_list_element and len(positive_experience_list_element) >= 4:
+        positive_experience_list.append(positive_experience_list_element)
+
+    print(experience_answers)
+    print(positive_experience_list)
+    experience_percentage = round((len(positive_experience_list)/len(answers))*100,1)
         
 
             
@@ -262,8 +275,10 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             html.h3("Calificación de experiencia general de los usuarios con el producto: "),
             html.h2(f"Cantidad total de encuestados: {len(answers)}"),
             html.h3("Experiencia general:"),
-            html.h2(f"Positiva: {len(answers)} encuestados"),
-            html.h2(f"Negativa {len(answers)} encuestados"),
+            html.h2(f"Positiva: {len(positive_experience_list)} encuestado/s"),
+            html.h2(f"Negativa {len(answers)-len(positive_experience_list)} encuestado/s"),
+            html.h3("Porcentaje general de satisfacción de los encuestados: "),
+            html.h2(f"{experience_percentage}%"),
             html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"Recoger otra respuesta")
             )
             )
