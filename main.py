@@ -323,7 +323,7 @@ def AllResultsPage(onAllResultsChange):
                     html.header( #Encabezado de la página
                     {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
                     html.h1("Encuesta de satisfacción del usuario"),
-                    
+                   #coso 
                 ),
                 html.p({"style":{"color":"#454545"}},"En esta sección podrás consultar el listado de todas las respuestas recopiladas hasta el momento"),
                 html.ul({"style":{"list-style":"none"}},
