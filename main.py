@@ -15,12 +15,13 @@ answers=[]
 
 @component #Componente principal
 def App():
-    
+    print(answers)
     current_answer, set_current_answer = hooks.use_state({"id":1})
     reset, set_reset = hooks.use_state(True)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
     results, set_results = hooks.use_state(False)
+    all_results, set_all_results = hooks.use_state(False)
     def handleRatingChange(idx, newRating): #Funciones que reciben y almacenan el valor de cada pregunta y lo almacenan en current_answer
         current_answer["q"+str((idx+1))] = int(newRating)
 
@@ -66,26 +67,36 @@ def App():
         set_results(False)
         set_reset(False)
         set_is_valid(None)
-        
+    def handleAllResultsPage():
+        if all_results == True:
+            set_all_results(False)
+            set_reset(None)
+            set_is_valid(None)
+            return
+        set_results(False)
+        set_all_results(True)
+    
     
     if reset:
         if results:
-            return ResultsPage(handleResultsPage)
-        else: 
-            return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
-                html.main({"style":{"margin-left":"15vw","width":"65vw"}},
-                    html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
-                    html.header( #Encabezado de la página
-                    {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
-                    html.h1("Encuesta de satisfacción del usuario")
-                ),html.p({"style":{"color":"#454545"}},"¡Felicidades! Has terminado de rellenar nuestra encuesta de satisfacción, tus opiniones son de gran importancia para nosotros. ¡Gracias! "),
-                html.h3("Decide si mirar los resultados de las encuestas o recoger otra respuesta: "),
-                html.section({"style":{"display":"flex"}},
-                    html.button({"on_click":lambda x: set_results(True),"style":{"height":"50px","width":"20%", "margin-left":"0%","font-size":"20px"}},"Mirar resultados"),
-                    html.button({"on_click":lambda x: handleGeneralReset(),"style":{"height":"50px","width":"300px", "margin-left":"50%","font-size":"20px"}},"Recoger otra respuesta"))
-                )
-                )
-        
+            return ResultsPage(handleResultsPage, handleAllResultsPage)
+        else:
+            if all_results:
+                return AllResultsPage(handleAllResultsPage)
+            else:
+                return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
+                    html.main({"style":{"margin-left":"15vw","width":"65vw"}},
+                        html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
+                        html.header( #Encabezado de la página
+                        {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
+                        html.h1("Encuesta de satisfacción del usuario")
+                    ),html.p({"style":{"color":"#454545"}},"¡Felicidades! Has terminado de rellenar nuestra encuesta de satisfacción, tus opiniones son de gran importancia para nosotros. ¡Gracias! "),
+                    html.h3("Decide si mirar los resultados de las encuestas o recoger otra respuesta: "),
+                    html.section({"style":{"display":"flex"}},
+                        html.button({"on_click":lambda x: set_results(True),"style":{"height":"50px","width":"20%", "margin-left":"0%","font-size":"20px"}},"Mirar resultados"),
+                        html.button({"on_click":lambda x: handleGeneralReset(),"style":{"height":"50px","width":"300px", "margin-left":"50%","font-size":"20px"}},"Recoger otra respuesta"))
+                    )
+                    )
     else:
         return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
             html.main({"style":{"margin-left":"15vw","width":"65vw"}}, #Contenedor de la encuesta
@@ -184,10 +195,12 @@ def Open_Question(idx, onOpinionChange, isReset): #Componente de preguntas abier
                 html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(),
                 html.textarea({"value":opinion if not isReset else "","onchange":opinionHandleChange,"placeholder":"Ingrese aquí sus opiniones.", "style":{"width":"70%", "height":"100px", "margin-left":"28px", "resize":"none"}}), html.br(), html.br()
             )
+
 recommend_list = []
 positive_experience_list = []
 @component
-def ResultsPage(onResultsChange): #Componente de Página de resultados
+def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de resultados
+    
     quality_answers = deepcopy(answers)
     quality_list = []
     for i in range(len(answers)): #Bucle para seleccionar únicamente las respuestas con valor para calificación de calidad y guardarlas en una lista
@@ -228,7 +241,7 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
     if recommend_list_element and len(recommend_list_element) >= 2:
         recommend_list.append(recommend_list_element)
     
-    print(recommend_list)
+
     recommends_percentage = round((len(recommend_list)/len(answers))*100, 1)
     
     #Experiencia general: Respuestas totales__. Experiencia general: Positiva: __ encuestados. Negativa: ___ encuestados.
@@ -246,8 +259,6 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             positive_experience_list_element.append(j)
     if positive_experience_list_element and len(positive_experience_list_element) >= 4:
         positive_experience_list.append(positive_experience_list_element)
-
-    print(experience_answers)
     print(positive_experience_list)
     experience_percentage = round((len(positive_experience_list)/len(answers))*100,1)
         
@@ -259,27 +270,55 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
 
     
     return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
-            html.main({"style":{"margin-left":"15vw","width":"65vw"}},
-                html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
-                html.header( #Encabezado de la página
-                {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
-                html.h1("Encuesta de satisfacción del usuario"),
+                html.main({"style":{"margin-left":"15vw","width":"65vw"}},
+                    html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
+                    html.header( #Encabezado de la página
+                    {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
+                    html.h1("Encuesta de satisfacción del usuario"),
+                    
+                ),
+                html.p({"style":{"color":"#454545"}},"En esta sección podrás consultar el promedio de los resultados recogidos y mirar todas las respuestas recopiladas"),
+                html.h3("Calificación de calidad del producto: "),
+                html.h2(f"Promedio: {quality_average}"),
+                html.h3("Índice de recomendación del producto: "),
+                html.h2(f"Porcentaje: {recommends_percentage}%"),
+                html.p({"style":{"color":"#454545"}}, f"{len(recommend_list)}/{len(answers)} encuestados recomiendan el producto"),
+                html.h3("Calificación de experiencia general de los usuarios con el producto: "),
+                html.h2(f"Cantidad total de encuestados: {len(answers)}"),
+                html.h3("Experiencia general:"),
+                html.h2(f"Positiva: {len(positive_experience_list)} encuestado/s"),
+                html.h2(f"Negativa {len(answers)-len(positive_experience_list)} encuestado/s"),
+                html.h3("Porcentaje general de satisfacción de los encuestados: "),
+                html.h2(f"{experience_percentage}%"),
+                html.section({"style":{"display":"flex"}},
+                    html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"Recoger otra respuesta"),
+                    html.button({"on_click":lambda x: onAllResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"50%","font-size":"20px"}},"Ver todas las respuestas")
+                )
                 
-            ),
-            html.p({"style":{"color":"#454545"}},"En esta sección podrás consultar el promedio de los resultados recogidos y mirar todas las respuestas recopiladas"),
-            html.h3("Calificación de calidad del producto: "),
-            html.h2(f"Promedio: {quality_average}"),
-            html.h3("Índice de recomendacion del producto: "),
-            html.h2(f"Porcentaje: {recommends_percentage}%"),
-            html.p({"style":{"color":"#454545"}}, f"{len(recommend_list)}/{len(answers)} encuestados recomiendan el producto"),
-            html.h3("Calificación de experiencia general de los usuarios con el producto: "),
-            html.h2(f"Cantidad total de encuestados: {len(answers)}"),
-            html.h3("Experiencia general:"),
-            html.h2(f"Positiva: {len(positive_experience_list)} encuestado/s"),
-            html.h2(f"Negativa {len(answers)-len(positive_experience_list)} encuestado/s"),
-            html.h3("Porcentaje general de satisfacción de los encuestados: "),
-            html.h2(f"{experience_percentage}%"),
-            html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"Recoger otra respuesta")
-            )
-            )
+                )
+                )
+    
+@component
+def AllResultsPage(onAllResultsChange):
+    return html.div({"style":{"font-family":"Segoe UI"}}, #Contenedor general (body)
+                html.main({"style":{"margin-left":"15vw","width":"65vw"}},
+                    html.link({"rel": "stylesheet", "href": "/static/styles.css"}),
+                    html.header( #Encabezado de la página
+                    {"style":{"display":"flex","justify-content":"center", "background-color":"#212121","color":"white","margin-top": "-8px", "height":"10vh"}},
+                    html.h1("Encuesta de satisfacción del usuario"),
+                    
+                ),
+                html.p({"style":{"color":"#454545"}},"En esta sección podrás consultar el listado de todas las respuestas recopiladas hasta el momento"),
+                html.ul({"style":{"list-style":"none"}},
+                *map(lambda answer: html.li({"key":answer["id"]},
+                    html.h2(f"ENCUESTADO #{answer["id"]}"),
+                    html.h3(f"{questions[0][""]}")
+                ), answers)),
+                html.section({"style":{"display":"flex"}},
+                    html.button({"on_click":lambda x: onAllResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"Recoger otra respuesta")
+                )
+                
+                )
+                )
+
 configure(app, App)
