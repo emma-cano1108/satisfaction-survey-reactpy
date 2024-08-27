@@ -180,7 +180,7 @@ def Open_Question(idx, onOpinionChange, isReset): #Componente de preguntas abier
                 html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(),
                 html.textarea({"value":opinion if not isReset else "","onchange":opinionHandleChange,"placeholder":"Ingrese aquí sus opiniones.", "style":{"width":"70%", "height":"100px", "margin-left":"28px", "resize":"none"}}), html.br(), html.br()
             )
-
+recommend_list = []
 @component
 def ResultsPage(onResultsChange): #Componente de Página de resultados
     #Calificación de calidad del producto: Q1, Q4, Q5, Q6
@@ -206,7 +206,6 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
     quality_average = round(statistics.mean(quality_list), 2)
 
     recommend_answers = deepcopy(answers)
-    recommend_list = []
     recommend_list_element = []
     for i in range(len(answers)): #Bucle para seleccionar únicamente las respuestas con valor para calificación de calidad y guardarlas en una lista
         if "id" in recommend_answers[i].keys():
@@ -221,10 +220,10 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             del recommend_answers[i]["q7"]
         if "q8" in recommend_answers[i].keys():
             del recommend_answers[i]["q8"]
-        for j in list(recommend_answers[i].values()):
-            if type(j) != str:
-               recommend_list_element.append(j)
-        recommend_list.append(recommend_list_element)
+    for j in list(recommend_answers[i].values()):
+        if type(j) != str:
+            recommend_list_element.append(j)
+    recommend_list.append(recommend_list_element)
        
         
             
@@ -238,7 +237,7 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
     # positive_recommends = len(list(filter(isRecommended, recommend_list)))
 
     # recommend_total = len(recommend_list)
-    print(recommend_list)
+    print("2",recommend_list)
     # recommends_percentage = round((positive_recommends/recommend_total)*100, 2)
     
     
