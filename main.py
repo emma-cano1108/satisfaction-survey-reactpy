@@ -64,6 +64,9 @@ def App():
         set_is_valid(None)
     def handleResultsPage(): #Función para salir de la página de resultados
         set_results(False)
+        set_reset(False)
+        set_is_valid(None)
+        
     
     if reset:
         if results:
@@ -181,11 +184,9 @@ def Open_Question(idx, onOpinionChange, isReset): #Componente de preguntas abier
                 html.textarea({"value":opinion if not isReset else "","onchange":opinionHandleChange,"placeholder":"Ingrese aquí sus opiniones.", "style":{"width":"70%", "height":"100px", "margin-left":"28px", "resize":"none"}}), html.br(), html.br()
             )
 recommend_list = []
+positive_experience_list = []
 @component
 def ResultsPage(onResultsChange): #Componente de Página de resultados
-    #Calificación de calidad del producto: Q1, Q4, Q5, Q6
-    #Clientes que recomendarían el producto: Q2, Q5, Q6
-    #Experiencia general: conteo de respuestas totales y promedio de los puntos anteriores, clasificacion en buena o mala experiencia segun el resultado
     quality_answers = deepcopy(answers)
     quality_list = []
     for i in range(len(answers)): #Bucle para seleccionar únicamente las respuestas con valor para calificación de calidad y guardarlas en una lista
@@ -228,9 +229,16 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
     
     print(recommend_list)
     recommends_percentage = round((len(recommend_list)/len(answers))*100, 1)
+    experience_answers = deepcopy(answers)
+    
+    #Experiencia general: Respuestas totales__. Experiencia general: Positiva: __ encuestados. Negativa: ___ encuestados.
+    for i in range(len(answers)):
+        if "id" in experience_answers[i].keys():
+            del experience_answers[i]["id"]
+    
+    #print(experience_answers)
+        
 
-            
-            
             
 
     
@@ -251,7 +259,12 @@ def ResultsPage(onResultsChange): #Componente de Página de resultados
             html.h3("Índice de recomendacion del producto: "),
             html.h2(f"Porcentaje: {recommends_percentage}%"),
             html.p({"style":{"color":"#454545"}}, f"{len(recommend_list)}/{len(answers)} encuestados recomiendan el producto"),
-            html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"VOLVER")
+            html.h3("Calificación de experiencia general de los usuarios con el producto: "),
+            html.h2(f"Cantidad total de encuestados: {len(answers)}"),
+            html.h3("Experiencia general:"),
+            html.h2(f"Positiva: {len(answers)} encuestados"),
+            html.h2(f"Negativa {len(answers)} encuestados"),
+            html.button({"on_click":lambda x: onResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"Recoger otra respuesta")
             )
             )
 configure(app, App)
