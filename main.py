@@ -304,16 +304,12 @@ def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de 
 
 comments_list = []
 @component
-def QuestionsAndAnswers(idx):
+def QuestionsAndAnswers(answers_for_user):
     return html.section(
         *map(lambda question: html.div(
             html.h3(f"{question["id"]}. {question["text"]}"),
-            # *map(lambda answer: html.h4(f"Calificación: {answer["q"+str(question["id"])]}"), answers),
-            ), questions),
-        *map(lambda question: html.div(
-            *map(lambda answer: html.h4(f"Calificación: {answer["q"+str(question["id"])]}"), answers),
+            html.h4(f"Calificación: {answers_for_user["q"+str(question["id"])]}")
             ), questions)
-            
         
     )
 
@@ -332,16 +328,17 @@ def AllResultsPage(onAllResultsChange):
                 html.ul({"style":{"list-style":"none"}},
                 *map(lambda answer: html.li({"key":answer["id"]},
                     html.h2(f"ENCUESTADO #{answer["id"]}"),
-                    QuestionsAndAnswers(answer["id"]-1),
-                    html.h2("Comentarios"),
-                    #html.h3(f"{questions[4]["opt-text"]}"),
-                    #html.h4(f"-{answer["q4_comment"]}")
+                    QuestionsAndAnswers(answer),
                     
+                    *(html.h4(comment) for comment in [
+                    "Comentarios:",
+                    answer.get('q4_comment'), 
+                    answer.get('q5_comment'), 
+                    answer.get('q6_comment')
+                    ] if comment),
+                    html.br(), html.br()
                 ), answers)),
                 html.button({"on_click":lambda x: onAllResultsChange(),"style":{"height":"50px","width":"40%", "margin-left":"28px","font-size":"20px"}},"Recoger otra respuesta")
-                
-                
                 )
                 )
-
 configure(app, App)
