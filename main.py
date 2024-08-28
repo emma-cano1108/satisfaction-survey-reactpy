@@ -16,7 +16,7 @@ answers=[]
 @component #Componente principal
 def App():
     print(answers)
-    current_answer, set_current_answer = hooks.use_state({"id":1})
+    current_answer, set_current_answer = hooks.use_state({"id":1, "q1":0, "q2":0, "q3":0, "q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0,"q6:comment":"", "q7":0, "q8":0})
     reset, set_reset = hooks.use_state(True)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
@@ -267,7 +267,7 @@ def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de 
         
 
             
-
+    print(answers[0])
     
 
 
@@ -304,10 +304,13 @@ def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de 
 
 comments_list = []
 @component
-def QuestionsAndAnswers():
+def QuestionsAndAnswers(idx):
     return html.section(
         *map(lambda question: html.div(
             html.h3(f"{question["id"]}. {question["text"]}"),
+            # *map(lambda answer: html.h4(f"Calificación: {answer["q"+str(question["id"])]}"), answers),
+            ), questions),
+        *map(lambda question: html.div(
             *map(lambda answer: html.h4(f"Calificación: {answer["q"+str(question["id"])]}"), answers),
             ), questions)
             
@@ -329,7 +332,7 @@ def AllResultsPage(onAllResultsChange):
                 html.ul({"style":{"list-style":"none"}},
                 *map(lambda answer: html.li({"key":answer["id"]},
                     html.h2(f"ENCUESTADO #{answer["id"]}"),
-                    QuestionsAndAnswers(),
+                    QuestionsAndAnswers(answer["id"]-1),
                     html.h2("Comentarios"),
                     #html.h3(f"{questions[4]["opt-text"]}"),
                     #html.h4(f"-{answer["q4_comment"]}")
