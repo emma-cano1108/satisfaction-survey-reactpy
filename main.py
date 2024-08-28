@@ -5,7 +5,6 @@ from fastapi.staticfiles import StaticFiles
 from reactpy import component, html, hooks
 from reactpy.backend.fastapi import configure
 from fastapi import FastAPI
-import db
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 with open("./content.json") as content: #Leer las preguntas desde el archivo JSON
@@ -16,9 +15,9 @@ answers=[]
 
 @component #Componente principal
 def App():
-    answers=db.listAnswers()
-    current_answer, set_current_answer = hooks.use_state({"id":answers[-1]["id"]+1 if len(answers)>=1 else 1, "q1":0, "q2":0, "q3":0, "q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0,"q6_comment":"", "q7":0, "q8":0})
-    reset, set_reset = hooks.use_state(None)
+    print(answers)
+    current_answer, set_current_answer = hooks.use_state({"id":1, "q1":0, "q2":0, "q3":0, "q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0,"q6:comment":"", "q7":0, "q8":0})
+    reset, set_reset = hooks.use_state(True)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
     results, set_results = hooks.use_state(False)
@@ -50,15 +49,14 @@ def App():
 
     def handleSubmit(): #Función para guardar las respuestas en la lista answers y reiniciar el valor de current_answer
         formValidation()
-        print(current_answer)
+
         if is_valid:
             apply_answer = current_answer.copy()
 
             answers.append(apply_answer)
             
             
-            set_current_answer({"id":current_answer["id"]+1, "q1":0, "q2":0, "q3":0, "q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0,"q6_comment":"", "q7":0, "q8":0})
-            db.createNewAnswer("answer-"+str(apply_answer["id"]), apply_answer)
+            set_current_answer({"id":current_answer["id"]+1})
             set_reset(True)
             set_button_is_valid(True)
         else:
@@ -205,7 +203,7 @@ recommend_list = []
 positive_experience_list = []
 @component
 def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de resultados
-    answers=db.listAnswers()
+    
     quality_answers = deepcopy(answers)
     quality_list = []
     for i in range(len(answers)): #Bucle para seleccionar únicamente las respuestas con valor para calificación de calidad y guardarlas en una lista
@@ -227,7 +225,6 @@ def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de 
 
     recommend_answers = deepcopy(answers)
     recommend_list_element = []
-    
     for i in range(len(answers)): #Bucle para seleccionar únicamente las respuestas con valor para calificación de calidad y guardarlas en una lista
         if "id" in recommend_answers[i].keys():
             del recommend_answers[i]["id"]
@@ -241,14 +238,11 @@ def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de 
             del recommend_answers[i]["q7"]
         if "q8" in recommend_answers[i].keys():
             del recommend_answers[i]["q8"]
-        print(recommend_answers[i])
     for j in list(recommend_answers[i].values()):
         if type(j) != str and j >= 3:
             recommend_list_element.append(j)
-            
     if recommend_list_element and len(recommend_list_element) >= 2:
         recommend_list.append(recommend_list_element)
-    print("a",recommend_list)
     
 
     recommends_percentage = round((len(recommend_list)/len(answers))*100, 1)
@@ -268,10 +262,12 @@ def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de 
             positive_experience_list_element.append(j)
     if positive_experience_list_element and len(positive_experience_list_element) >= 4:
         positive_experience_list.append(positive_experience_list_element)
+    print(positive_experience_list)
     experience_percentage = round((len(positive_experience_list)/len(answers))*100,1)
         
 
             
+    print(answers[0])
     
 
 
