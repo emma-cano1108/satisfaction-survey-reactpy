@@ -1,141 +1,264 @@
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f0f0f0;
+    background-image: url('https://i.pinimg.com/736x/8a/c6/6b/8ac66b22a65c6abec52bd3b8765bb6f0.jpg');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
     margin: 0;
     padding: 0;
+    color: #333;
 }
 
-/* Contenedor principal */
-.main-container {
-    margin: 0 auto;
-    padding: 2rem;
-    max-width: 80vw;
-    background-color: #ffffff;
+h1 {
+    color: white;
+    font-weight: 600;
+}
+
+h2 {
+    color: #212529;
+    font-weight: 600;
+    background-color: rgb(128, 136, 140);
+}
+
+h3 {
+    color: #212529;
+    font-weight: 600;
+    padding:2 ;
+    background-color: rgb(161, 161, 161);
+    font-size: 1.2rem;
+    margin-bottom: 5px;
+}
+
+div {
+    color: #212529;
+    font-weight: 600;
+    padding: 1rem;
+}
+
+nav {
+    color: #212529;
+    font-weight: 300;
+    padding: 1rem;
+    border: 2px solid rgb(108, 108, 108);
+}
+
+p {
+    color: #555;
+    line-height: 1.6;
+    background-color: rgb(209, 209, 209);
+}
+
+span {
+    top:0;
+    left: 20px;
+    width: 20px;
+    height: 20px;
+    background-image: url('https://i.pinimg.com/564x/a7/21/34/a72134112836507502c72d5b3c14fdf2.jpg');
+
+}
+
+main {
+    max-width: 800px;
+    margin: 20px auto;
+    padding: 20px;
+    background: white;
     border-radius: 8px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    box-shadow: 10 10 10px rgba(0, 0, 0, 0.1);
+    font-size: 16px;
 }
 
-/* Encabezado */
-.header {
+header {
     display: flex;
     justify-content: center;
     align-items: center;
     background-color: #212121;
-    color: white;
+    color: rgb(232, 232, 232);
     padding: 1rem;
-    border-radius: 8px 8px 0 0;
+    border-radius: 8px;
+    margin-bottom: 20px;
 }
 
-.header h1 {
-    margin: 0;
+header h1 {
     font-size: 2rem;
+    margin: 0;
 }
 
-/* Botones */
-.button {
+
+article {
+    font-weight: 600;
+    padding: 5px;
+    margin-left: 15%;
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    border-radius: 15px;
+    width: 500px;
+    height: 100px;
+}
+
+button {
+    background-color: #3d3d3d;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
     height: 50px;
     width: 200px;
-    font-size: 1.2rem;
-    border: none;
-    border-radius: 4px;
+    margin: 10px;
+    margin-left: 33%;
+    padding: 12px 24px;
+    align-items: center;
+    display: inline-block;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+button:hover {
+    background-color: #363636;
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+/* Question container styles */
+section {
+    margin-bottom: 10px;
+    display: flex;
+    flex-direction: column;
+    font-size: 1.5rem;
+}
+
+/* Star rating styles */
+img {
     cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.button.primary {
-    background-color: #007bff;
-    color: white;
-}
-
-.button.primary:hover {
-    background-color: #0056b3;
-}
-
-.button.secondary {
-    background-color: #28a745;
-    color: white;
-}
-
-.button.secondary:hover {
-    background-color: #218838;
-}
-
-/* Contenedor de preguntas */
-.questions-container {
-    margin-top: 1rem;
-}
-
-/* Preguntas de estrellas */
-.star-question {
-    margin-bottom: 1rem;
-}
-
-.star-question h3 {
-    margin: 0 0 0.5rem 0;
-}
-
-.star-question .stars {
+    transition: transform 0.2s;
+    margin: 5px;
     display: flex;
     gap: 10px;
-}
-
-.star-question img {
-    width: 30px;
+    width: 40px;
+    height: 40px;
     cursor: pointer;
-    transition: opacity 0.3s;
 }
 
-.star-question img:not(:hover) {
-    opacity: 0.7;
+img:hover {
+    transform: scale(1.2);
 }
 
-/* Preguntas de radio */
-.radio-question {
-    margin-bottom: 1rem;
+/* Radio and textarea styles */
+input[type="radio"] {
+    margin-right: 8px;
 }
 
-.radio-question h3 {
-    margin: 0 0 0.5rem 0;
+textarea {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    resize: vertical;
+    font-size: 1rem;
+    margin-top: 5px;
 }
 
-.radio-question .options {
-    font-size: 1.2rem;
+/* Results page styles */
+ul {
+    list-style: none;
+    padding: 0;
 }
 
-.radio-question textarea {
+li {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background: #f9f9f9;
+}
+
+li h2 {
+    font-size: 1.3rem;
+    margin: 0;
+}
+
+li h3 {
+    font-size: 1.1rem;
+    color: #666;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    main {
+        padding: 15px;
+    }
+
+    textarea {
+        font-size: 0.9rem;
+    }
+}
+
+open-question {
     width: 100%;
     height: 100px;
-    resize: none;
-    border: 1px solid #ccc;
+    padding: 10px;
+    border: 1px solid #c92c2c;
+    border-radius: 8px;
+    resize: vertical;
+    margin-top: 5px;
+}
+
+open-question:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+label {
+    width: 30px;
+    padding: 5px;
     border-radius: 4px;
-    padding: 0.5rem;
-    margin-top: 0.5rem;
-    font-size: 1rem;
+    margin-right: 10px;
 }
 
-/* Preguntas abiertas */
-.open-question {
-    margin-bottom: 1rem;
+ul {
+    list-style: none;
+    padding: 0;
 }
 
-.open-question h3 {
-    margin: 0 0 0.5rem 0;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .div {
+        flex-direction: column;
+        align-items: flex-start;
+    }
 }
 
-.open-question textarea {
+
+
+/* Styling for the section that resembles a table */
+section {
+    display: table;
     width: 100%;
-    height: 100px;
-    resize: none;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    padding: 0.5rem;
-    margin-top: 0.5rem;
-    font-size: 1rem;
+    border-collapse: collapse;
+    display: flex;
+    flex-direction: column;
 }
 
-/* Mensaje de finalización */
-.end-message {
-    text-align: center;
-    padding: 2rem 0;
-    font-size: 1.2rem;
+h3 {
+    display: table-row;
+    font-weight: bold;
+    background-color: #f4f4f4;
+    padding: 10px;
+}
+
+h5 {
+    display: table-row;
+    font-weight: bold;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+h4 {
+    color: #707070;
+    line-height: 1.6;
+    background-color: rgb(209, 209, 209);
 }
