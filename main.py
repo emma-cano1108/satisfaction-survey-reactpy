@@ -17,8 +17,8 @@ answers=[]
 @component #Componente principal
 def App():
     answers=db.listAnswers()
-    current_answer, set_current_answer = hooks.use_state({"id":answers[-1]["id"]+1, "q1":0, "q2":0, "q3":0, "q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0,"q6_comment":"", "q7":0, "q8":0})
-    reset, set_reset = hooks.use_state(True)
+    current_answer, set_current_answer = hooks.use_state({"id":answers[-1]["id"]+1 if len(answers)>=1 else 1, "q1":0, "q2":0, "q3":0, "q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0,"q6_comment":"", "q7":0, "q8":0})
+    reset, set_reset = hooks.use_state(None)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
     results, set_results = hooks.use_state(False)
@@ -225,7 +225,7 @@ def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de 
         
     quality_average = round(statistics.mean(quality_list), 2)
 
-    recommend_answers = db.listAnswers()
+    recommend_answers = deepcopy(answers)
     recommend_list_element = []
     
     for i in range(len(answers)): #Bucle para seleccionar únicamente las respuestas con valor para calificación de calidad y guardarlas en una lista
