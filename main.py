@@ -5,6 +5,7 @@ from fastapi.staticfiles import StaticFiles
 from reactpy import component, html, hooks
 from reactpy.backend.fastapi import configure
 from fastapi import FastAPI
+import db
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 with open("./content.json") as content: #Leer las preguntas desde el archivo JSON
@@ -16,7 +17,7 @@ answers=[]
 @component #Componente principal
 def App():
     print(answers)
-    current_answer, set_current_answer = hooks.use_state({"id":1, "q1":0, "q2":0, "q3":0, "q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0,"q6:comment":"", "q7":0, "q8":0})
+    current_answer, set_current_answer = hooks.use_state({"id":1, "q1":0, "q2":0, "q3":0, "q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0,"q6_comment":"", "q7":0, "q8":0})
     reset, set_reset = hooks.use_state(True)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
@@ -56,7 +57,8 @@ def App():
             answers.append(apply_answer)
             
             
-            set_current_answer({"id":current_answer["id"]+1})
+            set_current_answer({"id":current_answer["id"]+1, "q1":0, "q2":0, "q3":0, "q4":0, "q4_comment":"", "q5":0, "q5_comment":"", "q6":0,"q6_comment":"", "q7":0, "q8":0})
+            db.createNewAnswer("answer-"+str(apply_answer["id"]), apply_answer)
             set_reset(True)
             set_button_is_valid(True)
         else:
