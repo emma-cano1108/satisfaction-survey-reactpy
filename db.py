@@ -36,4 +36,3 @@ def listAnswers():
     )["documents"]
     return response
 
-print(listAnswers())
