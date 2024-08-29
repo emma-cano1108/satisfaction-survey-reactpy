@@ -17,7 +17,7 @@ answers=[]
 def App():
     print(answers)
     current_answer, set_current_answer = hooks.use_state({"id":1})
-    reset, set_reset = hooks.use_state(True)
+    reset, set_reset = hooks.use_state(None)
     is_valid, set_is_valid = hooks.use_state(None)
     button_is_valid, set_button_is_valid = hooks.use_state(True)
     results, set_results = hooks.use_state(False)
@@ -90,13 +90,17 @@ def App():
                         html.header( #Encabezado de la página
                         {},
                         html.h1("Encuesta de satisfacción del usuario")
-                    ),html.p({},"¡Felicidades! Has terminado de rellenar nuestra encuesta de satisfacción, tus opiniones son de gran importancia para nosotros. ¡Gracias! "),
-                    html.br(),
+                    ),
+                    html.div({"class":"paragraph2"},
+                    html.p({"class":"paragraph_item2"},"¡Felicidades! Has terminado de rellenar nuestra encuesta de satisfacción, tus opiniones son de gran importancia para nosotros. ¡Gracias! "),
+                    html.img({"class":"imagen2","src":"/static/survey.png"})
+                    ),
+                    html.br(), html.br(),
                     html.h2("Decide si mirar los resultados de las encuestas o recoger otra respuesta: "),
                     html.br(), html.br(), html.br(), html.br(), html.br(),
                     html.section({"style":{"display":"flex", "flex-direction":"row"}},
-                        html.button({"class":"button_1","on_click":lambda x: set_results(True)},"Mirar resultados"),
-                        html.button({"class":"button_1","on_click":lambda x: handleGeneralReset()},"Recoger otra respuesta"))
+                        html.button({"class":"button_1","on_click":lambda x: set_results(True)},"Mirar resultados 🔎"),
+                        html.button({"class":"button_1","on_click":lambda x: handleGeneralReset()},"Recoger otra respuesta ✉"))
                     )
                     )
     else:
@@ -107,7 +111,10 @@ def App():
                 {},
                 html.h1("Encuesta de satisfacción del usuario")
             ),
-            html.p({},"Tu opinión es muy importante para nosotros, por lo tanto nos gustaría que respondas la siguiente encuesta de satisfacción. Gracias por usar nuestros servicios, usamos tus opiniones para mejorar cada día y ofrecer un mejor servicio."),
+            html.div({"class":"paragraph"},
+            html.p({"class":"paragraph_item"}, "Tu opinión es muy importante para nosotros, por lo tanto nos gustaría que respondas la siguiente encuesta de satisfacción. Gracias por usar nuestros servicios, usamos tus opiniones para mejorar cada día y ofrecer un mejor servicio."),
+            html.img({"class":"tortica","src":"/static/tortica2.png"})
+            ),
             html.h2("Selecciona la cantidad de estrellas en una calificación de 1 a 5"),
             html.nav( #Contenedor de las preguntas
                 Star_Question(0, handleRatingChange, reset),
@@ -158,7 +165,7 @@ def Star_Question(idx, onRatingChange, isReset): #Componente de pregunta de estr
                 html.img({"on_click":lambda x: handleStarClick(5),"src":not_selected if rating < 5 else selected, }),
                 html.img({"src":"/static/muyfeliz.png"}), 
             ),  
-        ), html.br(), html.br()
+        ), html.br()
     )
 
 
@@ -180,7 +187,7 @@ def Radio_Question(idx, onRadioChange, onCommentChange, isReset): #Componente de
 
         if radio_option == "0" and not isReset:
             return html.section(
-                html.h4({}, questions[idx]["opt-text"]),
+                html.h3({}, questions[idx]["opt-text"]), html.br(),
                 html.textarea({"value":comment,"onchange":commentHandleChange,"placeholder":"Ingrese aquí sus comentarios.", }), html.br(), html.br(),
             )
         else:
@@ -208,7 +215,7 @@ def Open_Question(idx, onOpinionChange, isReset): #Componente de preguntas abier
         onOpinionChange(idx, e["target"]["value"])
 
     return html.section(
-                html.h4(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(),
+                html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(),
                 html.textarea({"value":opinion if not isReset else "","onchange":opinionHandleChange,"placeholder":"Ingrese aquí sus opiniones.", }), html.br(), html.br()
             )
 
@@ -292,24 +299,33 @@ def ResultsPage(onResultsChange, onAllResultsChange): #Componente de Página de 
                     html.h1("Encuesta de satisfacción del usuario"),
                     
                 ),
-                html.p({},"En esta sección podrás consultar el promedio de los resultados recogidos y mirar todas las respuestas recopiladas"),
+                html.div({"class":"paragraph3"},
+                html.p({"class":"paragraph_item3"},"En esta sección podrás consultar el promedio de los resultados recogidos y mirar todas las respuestas recopiladas"),
+                html.img({"class":"imagen3","src":"/static/analisis.png"})
+                ),
                 html.br(), html.br(),
-                html.h5("Calificación de calidad del producto: "),
-                html.h6(f"Promedio: {quality_average}"),
-                html.h5("Índice de recomendación del producto: "),
-                html.h6(f"Porcentaje: {recommends_percentage}%"),
-                html.h6({}, f"{len(recommend_list)}/{len(answers)} encuestados recomiendan el producto"),
-                html.h5("Calificación de experiencia general de los usuarios con el producto: "),
-                html.h6(f"Cantidad total de encuestados: {len(answers)}"),
-                html.h5("Experiencia general:"),
-                html.h6(f"Positiva: {len(positive_experience_list)} encuestado/s"),
-                html.h6(f"Negativa {len(answers)-len(positive_experience_list)} encuestado/s"),
-                html.h5("Porcentaje general de satisfacción de los encuestados: "),
-                html.h6(f"{experience_percentage}%"),
+                html.div({"class":"tabla"},
+                    html.h5("Calificación de calidad del producto: "),
+                    html.h6(f"Promedio: {quality_average}"),
+                    html.br({"class":"raya"}),
+                    html.h5("Índice de recomendación del producto: "),
+                    html.h6(f"Porcentaje: {recommends_percentage}%"),
+                    html.h6({}, f"{len(recommend_list)}/{len(answers)} encuestados recomiendan el producto"),
+                    html.br({"class":"raya"}),
+                    html.h5("Calificación de experiencia general de los usuarios con el producto: "),
+                    html.h6(f"Cantidad total de encuestados: {len(answers)}"),
+                    html.br({"class":"raya"}),
+                    html.h5("Experiencia general:"),
+                    html.h6(f"Positiva: {len(positive_experience_list)} encuestado/s"),
+                    html.h6(f"Negativa {len(answers)-len(positive_experience_list)} encuestado/s"),
+                    html.br({"class":"raya"}),
+                    html.h5("Porcentaje general de satisfacción de los encuestados: "),
+                    html.h6(f"{experience_percentage}%"),
+                ),
                 html.br(), html.br(), html.br(), html.br(),
-                html.section({"style":{"display":"flex"}},
-                    html.button({"on_click":lambda x: onResultsChange(), },"Recoger otra respuesta"),
-                    html.button({"on_click":lambda x: onAllResultsChange(), },"Ver todas las respuestas")
+                html.section({"style":{"display":"flex", "flex-direction":"row"}},
+                    html.button({"class":"button_1", "on_click":lambda x: onResultsChange(), },"Recoger otra respuesta ✉"),
+                    html.button({"class":"button_1", "on_click":lambda x: onAllResultsChange(), },"Ver todas las respuestas ↗")
                 )
                 
                 )
@@ -351,7 +367,7 @@ def AllResultsPage(onAllResultsChange):
                     ] if comment),
                     html.br(), html.br()
                 ), answers)),
-                html.button({"on_click":lambda x: onAllResultsChange(), },"Recoger otra respuesta")
+                html.button({"on_click":lambda x: onAllResultsChange(), },"Recoger otra respuesta ✉")
                 )
                 )
 configure(app, App)

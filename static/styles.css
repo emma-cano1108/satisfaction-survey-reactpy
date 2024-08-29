@@ -16,7 +16,7 @@ h1 {
 h2 {
     color: #212529;
     font-weight: 600;
-    background-color: rgb(128, 136, 140);
+    background-color: #5d5d5d;
     padding: 14px;
     border-radius: 8px;
 }
@@ -24,9 +24,10 @@ h2 {
 h3 {
     color: #212529;
     font-weight: 600;
-    padding:2 ;
-    background-color: rgb(161, 161, 161);
+    background-color: #dfdfdf;
     font-size: 1.2rem;
+    padding: 6px;
+    border-radius: 8px;
     margin-bottom: 5px;
 }
 
@@ -47,7 +48,7 @@ nav {
 p {
     color: #555;
     line-height: 1.6;
-    background-color: rgb(209, 209, 209);
+    background-color: #d1d1d1;
     padding: 9px;
     border-radius: 8px;
 }
@@ -59,7 +60,7 @@ main {
     padding: 20px;
     background: white;
     border-radius: 8px;
-    box-shadow: 10 10 10px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 0 17px rgb(0, 0, 0);
     font-size: 16px;
 }
 
@@ -108,12 +109,12 @@ button {
     align-items: center;
     display: inline-block;
     justify-content: center;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 6px rgb(0, 0, 0);
 }
 
 
 button:hover {
-    background-color: #363636;
+    background-color: #282828;
 }
 
 .button_1:active {
@@ -130,12 +131,13 @@ button:hover {
     height: 65px;
     width: 360px;
     margin: 10px;
+    margin-bottom: 12;
     margin-left: 28px;
     padding: 12px 24px;
     align-items: center;
     display: inline-block;
     justify-content: center;
-    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 6px rgb(0, 0, 0);
 }
 
 .button_1+button{
@@ -170,7 +172,7 @@ img {
     cursor: pointer;
 }
 
-img:hover {
+.estrellas img:first-child:hover {
     transform: scale(1.2);
 }
 
@@ -188,6 +190,7 @@ textarea {
     resize: none;
     font-size: 1rem;
     margin-top: 5px;
+    background-color: #ededed;
 }
 
 /* Results page styles */
@@ -252,41 +255,114 @@ ul {
     padding: 0;
 }
 
-/* Responsive adjustments */
-@media (max-width: 768px) {
-    .div {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-}
-
-
-
 /* Styling for the section that resembles a table */
-section {
+.tabla {
     display: table;
-    width: 100%;
     border-collapse: collapse;
+    width: 90%;
     display: flex;
     flex-direction: column;
-}
+    border: 2px solid #7b7b7b;
+    font-size: 1.2rem;
+    border-radius: 8px;
 
-h3 {
-    display: table-row;
-    font-weight: bold;
-    background-color: #f4f4f4;
-    padding: 10px;
 }
 
 h5 {
-    display: table-row;
     font-weight: bold;
-    padding: 10px;
-    border-bottom: 1px solid #ddd;
+    background-color: #888888;
+    border: 2px solid gray;
+    padding: 9px;
+    border-radius: 8px;
+    
+}
+
+h6 {
+    font-weight: bold;
+    background-color:#dfdfdf;
+    padding: 7px;
+    border: 2px solid gray;
+    font-size: 13px;
+    border-radius: 8px;
+    margin-top: 2px;
+}
+
+.raya {
+    display: block;
+    content: '';
+    border-top: 2px solid #7b7b7b;
+    height: 0;
+    margin: 10px 0;
 }
 
 h4 {
     color: #707070;
     line-height: 1.6;
     background-color: rgb(209, 209, 209);
+}
+
+.paragraph{
+    padding: 5px;
+    display:grid;
+    grid-template-columns: 1fr, 40px;
+    color: #555;
+    background-color: #d1d1d1;
+    border-radius: 8px;
+}
+
+.paragraph_item{
+    line-height: 1.6;
+    padding: 9px;
+    
+    grid-column: 1/2;
+}
+
+.tortica{
+    grid-column: 2/2;
+    min-width: 120px;
+    min-height: 120px;
+}
+
+.paragraph2{
+    padding: 5px;
+    display:grid;
+    grid-template-columns: 1fr, 40px;
+    color: #555;
+    background-color: #d1d1d1;
+    border-radius: 8px;
+}
+
+.paragraph_item2{
+    line-height: 1.6;
+    padding: 9px;
+    
+    grid-column: 1/2;
+}
+
+.imagen2 {
+    grid-column: 2/2;
+    min-width: 90px;
+    min-height: 90px;
+}
+
+.paragraph3{
+    padding: 5px;
+    display:grid;
+    grid-template-columns: 1fr, 40px;
+    color: #555;
+    background-color: #d1d1d1;
+    border-radius: 8px;
+}
+
+.paragraph_item3{
+    line-height: 1.6;
+    padding: 9px;
+    
+    grid-column: 1/2;
+}
+
+.imagen3 {
+    grid-column: 2/2;
+    min-width: 90px;
+    min-height: 90px;
 }
