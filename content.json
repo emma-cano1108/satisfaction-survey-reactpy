@@ -1,37 +1,37 @@
 [
   {
     "id": 1,
-    "text": "¿Que tan satisfecho estás con nuestro servicio? (Muy insatisfecho, insatisfecho, neutral, satisfecho, muy satisfecho)"
+    "text": "Que tan satisfecho estas con nuestro servicio? (Muy insatisfecho, insatisfecho, neutral, satisfecho, muy satisfecho)"
   },
   {
     "id": 2,
-    "text": "¿Que tan recomendable es nuestro servicio? (Muy poco, poco, ni mucho ni poco, mucho, demasiado)"
+    "text": "Que tan recomendable es nuestro servicio? (Muy poco, poco, ni mucho ni poco, mucho, demasiado)"
   },
   {
     "id": 3,
-    "text": "¿Con que frecuencia usa nuestros servicios por semana? (1 vez, 2 a 3 veces, 4 veces, 5 veces, Más de 5 veces"
+    "text": "Con que frecuencia usa nuestros servicios por semana? (1 vez, 2 a 3 veces, 4 veces, 5 veces, Mas de 5 veces"
   },
   {
     "id":4,
-    "text": "¿Presentaste alguna inconformidad de algun tipo con nuestro servicio?",
-    "opt-text": "¿Podria describirnos su inconformidad?"
+    "text": "Presentaste alguna inconformidad de algun tipo con nuestro servicio?",
+    "opt-text": "Podria describirnos su inconformidad?"
   },
   {
     "id":5,
-    "text": "¿Volveria a usar nuestro servicio?",
-    "opt-text": "¿Por que?"
+    "text": "Volveria a usar nuestro servicio?",
+    "opt-text": "Por que?"
   },
   {
     "id":6,
-    "text":"¿Considera que nuestros servicios cumplen con sus expectativas?",
-    "opt-text": "¿En que podriamos mejorar?"
+    "text":"Considera que nuestros servicios cumplen con sus expectativas?",
+    "opt-text": "En que podriamos mejorar?"
   },
   {
     "id":7,
-    "text":"¿Que es lo que más te gusta de nuestro servicio?"
+    "text":"Que es lo que más te gusta de nuestro servicio?"
   },
   {
     "id":8,
-    "text":"¿Que es lo que menos te gusta de nuestro servicio?"
+    "text":"Que es lo que menos te gusta de nuestro servicio?"
   }
 ]
