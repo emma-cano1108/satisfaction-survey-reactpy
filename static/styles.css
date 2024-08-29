@@ -111,11 +111,42 @@ button {
     box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
 }
 
+
 button:hover {
     background-color: #363636;
 }
 
-button:active {
+.button_1:active {
+    transform: scale(0.98);
+}
+.button_1 {
+    background-color: #3d3d3d;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-size: 20px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+    height: 65px;
+    width: 360px;
+    margin: 10px;
+    margin-left: 28px;
+    padding: 12px 24px;
+    align-items: center;
+    display: inline-block;
+    justify-content: center;
+    box-shadow: 0 0 10px rgba(255, 255, 255, 0.1);
+}
+
+.button_1+button{
+    margin-left:40%
+}
+
+.button_1:hover {
+    background-color: #363636;
+}
+
+.button_1:active {
     transform: scale(0.98);
 }
 

@@ -94,9 +94,9 @@ def App():
                     html.br(),
                     html.h2("Decide si mirar los resultados de las encuestas o recoger otra respuesta: "),
                     html.br(), html.br(), html.br(), html.br(), html.br(),
-                    html.section({},
-                        html.button({"on_click":lambda x: set_results(True)},"Mirar resultados"),
-                        html.button({"on_click":lambda x: handleGeneralReset()},"Recoger otra respuesta"))
+                    html.section({"style":{"display":"flex", "flex-direction":"row"}},
+                        html.button({"class":"button_1","on_click":lambda x: set_results(True)},"Mirar resultados"),
+                        html.button({"class":"button_1","on_click":lambda x: handleGeneralReset()},"Recoger otra respuesta"))
                     )
                     )
     else:
@@ -119,7 +119,7 @@ def App():
                 Open_Question(6, handleOpinionChange, reset),
                 Open_Question(7, handleOpinionChange, reset)
             ),
-            html.button({"on_click":lambda x: handleSubmit()},"ENVIAR" if button_is_valid else "¿ESTAS SEGURO?")
+            html.button({"on_click":lambda x: handleSubmit()},"ENVIAR ✔" if button_is_valid else "¿ESTAS SEGURO?")
             ),
         )
 
@@ -138,11 +138,26 @@ def Star_Question(idx, onRatingChange, isReset): #Componente de pregunta de estr
     return html.section( #Contenedor principal de la pregunta
         html.h3(f"{questions[idx]["id"]} - {questions[idx]["text"]}"), html.br(), #Número y texto de la pregunta
         html.article({}, #Contenedor de las estrellas
-            html.img({"on_click":lambda x: handleStarClick(1),"src":not_selected if rating < 1 else selected, }),
-            html.img({"on_click":lambda x: handleStarClick(2),"src":not_selected if rating < 2 else selected, }),
-            html.img({"on_click":lambda x: handleStarClick(3),"src":not_selected if rating < 3 else selected, }),
-            html.img({"on_click":lambda x: handleStarClick(4),"src":not_selected if rating < 4 else selected, }),
-            html.img({"on_click":lambda x: handleStarClick(5),"src":not_selected if rating < 5 else selected, })
+            html.div({"class":"estrellas"},
+                html.img({"on_click":lambda x: handleStarClick(1),"src":not_selected if rating < 1 else selected, }),
+                html.img({"src":"/static/muytriste.png"})    
+            ),
+            html.div({"class":"estrellas"},
+                html.img({"on_click":lambda x: handleStarClick(2),"src":not_selected if rating < 2 else selected, }),
+                html.img({"src":"/static/triste.png"}), 
+            ),
+            html.div({"class":"estrellas"},
+                html.img({"on_click":lambda x: handleStarClick(3),"src":not_selected if rating < 3 else selected, }),
+                html.img({"src":"/static/serio.png"}),
+            ), 
+            html.div({"class":"estrellas"},   
+                html.img({"on_click":lambda x: handleStarClick(4),"src":not_selected if rating < 4 else selected, }),
+                html.img({"src":"/static/feliz.png"}),
+            ),
+            html.div({"class":"estrellas"},    
+                html.img({"on_click":lambda x: handleStarClick(5),"src":not_selected if rating < 5 else selected, }),
+                html.img({"src":"/static/muyfeliz.png"}), 
+            ),  
         ), html.br(), html.br()
     )
 
